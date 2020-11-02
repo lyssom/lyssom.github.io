@@ -123,7 +123,7 @@
     
     
     <h2 class="post-title">
-        Hello World
+        【elasticsearch】机制和架构
     </h2>
     <ul class="post-date">
         <li>
@@ -134,19 +134,18 @@
         </li>
     </ul>
     <div class="post-content">
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <h1 id="elasticsearch-机制和架构"><a href="#elasticsearch-机制和架构" class="headerlink" title="elasticsearch 机制和架构"></a>elasticsearch 机制和架构</h1><h3 id="索引结构和分片"><a href="#索引结构和分片" class="headerlink" title="索引结构和分片"></a>索引结构和分片</h3><p>一个文档由 _index 、 _type 和 _id 唯一标识一个文档。<br>_index<br>指向一个或者多个物理 分片 的 逻辑命名空间<br>_type<br>类型用于区分同一个集合中的不同细分，不同的细分中数据的整体模式是相同或相似的，不适合 完全不同类型的数据 ，多个类型可以在相同的索引中存在，只要它们的字段不冲突（对于整个索引，映射在本质上被 扁平化 成一个单一的、全局的模式）。</p>
+<h3 id="分片"><a href="#分片" class="headerlink" title="分片"></a>分片</h3><p>分片是一个底层的 工作单元，一个分片是一个 Lucene 的实例，它本身就是一个完整的搜索引擎,文档不会跨分片存储。<br>索引与分片的关系图：</p>
+<p><img src="C:\Users\Administrator\Desktop\15050012808218.jpg"></p>
+<p>存储目录截图：</p>
+<p><img src="C:\Users\Administrator\Desktop\15050013393691.jpg"></p>
+<p>一个分片可以是 主 分片或者 副本 分片，索引建立的时候就已经确定了主分片数，副本分片数可以随时修改。</p>
+<p>初始化时确定主分片数：<br>依据硬件情况等定好单个分片容量，依据业务场景预估数据量和增长量，除以单个分片容量。<br>分片数不够时，可以考虑重建索引，或者使用一个新的索引名称。搜索 1 个有着 50 个分片的索引与搜索 50 个每个都有 1 个分片的索引完全等价。</p>
+<h3 id="索引别名"><a href="#索引别名" class="headerlink" title="索引别名"></a>索引别名</h3><p>索引 别名 就像一个快捷方式或软连接，可以指向一个或多个索引。可以用于实现索引分组，或者索引间的无缝切换</p>
+<h3 id="动态更新索引"><a href="#动态更新索引" class="headerlink" title="动态更新索引"></a>动态更新索引</h3><p>倒排索引(Lucene中的段)被写入磁盘后是 不可改变 的:它永远不会修改<br>es增加新的补充索引来反映新近的修改，而不是直接重写整个倒排索引。每一个倒排索引都会被轮流查询到—从最早的开始–查询完后再对结果进行合并</p>
+<h3 id="近实时搜索"><a href="#近实时搜索" class="headerlink" title="近实时搜索"></a>近实时搜索</h3><p>按段（per-segment）搜索的发展<br>新段会被先写入到文件系统缓存，稍后再被刷新到磁盘，只要文件已经在缓存中， 就可以像其它文件一样被打开和读取了。</p>
+<h3 id="持久化变更"><a href="#持久化变更" class="headerlink" title="持久化变更"></a>持久化变更</h3><p>每一次对 Elasticsearch 进行操作时均记录事务日志，当 Elasticsearch 启动的时候，并且会重放 translog 中所有在最后一次提交后发生的变更操作。</p>
+<h3 id="段合并"><a href="#段合并" class="headerlink" title="段合并"></a>段合并</h3><p>为节省资源，提高检索效率，Elasticsearch通过在后台进行段合并，小的段被合并到大的段，然后这些大的段再被合并到更大的段。<br>通过optimize API可以将一个分片强制合并到指定的段数目。 （通常减少到一个）。例如在日志这种用例下，每天、每周、每月的日志被存储在一个索引中。 老的索引实质上是只读的；它们也并不太可能会发生变化</p>
 
     </div>
 </article>
