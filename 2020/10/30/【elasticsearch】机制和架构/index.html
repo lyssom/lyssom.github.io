@@ -136,9 +136,9 @@
     <div class="post-content">
         <h1 id="elasticsearch-机制和架构"><a href="#elasticsearch-机制和架构" class="headerlink" title="elasticsearch 机制和架构"></a>elasticsearch 机制和架构</h1><h3 id="索引结构和分片"><a href="#索引结构和分片" class="headerlink" title="索引结构和分片"></a>索引结构和分片</h3><p>一个文档由 _index 、 _type 和 _id 唯一标识一个文档。<br>_index<br>指向一个或者多个物理 分片 的 逻辑命名空间<br>_type<br>类型用于区分同一个集合中的不同细分，不同的细分中数据的整体模式是相同或相似的，不适合 完全不同类型的数据 ，多个类型可以在相同的索引中存在，只要它们的字段不冲突（对于整个索引，映射在本质上被 扁平化 成一个单一的、全局的模式）。</p>
 <h3 id="分片"><a href="#分片" class="headerlink" title="分片"></a>分片</h3><p>分片是一个底层的 工作单元，一个分片是一个 Lucene 的实例，它本身就是一个完整的搜索引擎,文档不会跨分片存储。<br>索引与分片的关系图：</p>
-<p><img src="C:\Users\Administrator\Desktop\15050012808218.jpg"></p>
+<p><img src="/.com//Users\Administrator\Desktop\15050012808218.jpg"></p>
 <p>存储目录截图：</p>
-<p><img src="C:\Users\Administrator\Desktop\15050013393691.jpg"></p>
+<p><img src="/.com//Users\Administrator\Desktop\15050013393691.jpg"></p>
 <p>一个分片可以是 主 分片或者 副本 分片，索引建立的时候就已经确定了主分片数，副本分片数可以随时修改。</p>
 <p>初始化时确定主分片数：<br>依据硬件情况等定好单个分片容量，依据业务场景预估数据量和增长量，除以单个分片容量。<br>分片数不够时，可以考虑重建索引，或者使用一个新的索引名称。搜索 1 个有着 50 个分片的索引与搜索 50 个每个都有 1 个分片的索引完全等价。</p>
 <h3 id="索引别名"><a href="#索引别名" class="headerlink" title="索引别名"></a>索引别名</h3><p>索引 别名 就像一个快捷方式或软连接，可以指向一个或多个索引。可以用于实现索引分组，或者索引间的无缝切换</p>
@@ -171,7 +171,7 @@
                 
     <h1>Tags</h1>
 
-    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li></ul>
 
             </section>
         </aside>
