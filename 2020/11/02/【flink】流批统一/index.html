@@ -134,7 +134,7 @@
         </li>
     </ul>
     <div class="post-content">
-        <h2 id="流批统一的计算引擎"><a href="#流批统一的计算引擎" class="headerlink" title="流批统一的计算引擎"></a>流批统一的计算引擎</h2><p>批与流是两种不同的数据处理模式，如Apache Storm只支持流模式的数据处理，Apache Spark只支持批(Micro Batching)模式的数据处理。那么Apache Flink 是如何做到既支持流处理模式也支持批处理模式呢？</p>
+        <h2 id="流批统一的计算引擎"><a href="#流批统一的计算引擎" class="headerlink" title="流批统一的计算引擎"></a>流批统一的计算引擎</h2><p>批与流是两种不同的数据处理模式，如Apache Storm只支持流模式的数据处理，Apache Spark只支持批(Micro Batching)模式的数据处理。那么Apache Flink 是如何做到既支持流处理模式也支持批处理模式呢？<a id="more"></a></p>
 <h3 id="统一的数据传输层"><a href="#统一的数据传输层" class="headerlink" title="统一的数据传输层"></a>统一的数据传输层</h3><p>开篇我们就介绍Apache Flink 的 “命脉“是以”批是流的特例“为导向来进行引擎的设计的，系统设计成为 “Native Streaming“的模式进行数据处理。那么Apache FLink将批模式执行的任务看做是流式处理任务的特殊情况，只是在数据上批是有界的(有限数量的元素)。</p>
 <p>Apache Flink 在网络传输层面有两种数据传输模式：<br>  PIPELINED模式 - 即一条数据被处理完成以后，立刻传输到下一个节点进行处理。<br>  BATCH 模式 - 即一条数据被处理完成后，并不会立刻传输到下一个节点进行处理，而是写入到缓存区，如果缓存写满就持久化到本地硬盘上，最后当所有数据都被处理完成后，才将数据传输到下一个节点进行处理。</p>
 <p>对于批任务而言同样可以利用PIPELINED模式，比如我要做count统计，利用PIPELINED模式能拿到更好的执行性能。只有在特殊情况，比如SortMergeJoin，这时候我们需要全局数据排序，才需要BATCH模式。大部分情况流与批可用统一的传输策略，只有特殊情况，才将批看做是流的一个特例继续特殊处理。</p>
@@ -170,6 +170,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

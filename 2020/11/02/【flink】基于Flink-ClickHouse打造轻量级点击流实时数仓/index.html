@@ -134,7 +134,7 @@
         </li>
     </ul>
     <div class="post-content">
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Flink和ClickHouse分别是实时计算和（近实时）OLAP领域的翘楚，也是近些年非常火爆的开源框架，很多大厂都在将两者结合使用来构建各种用途的实时平台，效果很好。关于两者的优点就不再赘述，本文来简单介绍笔者团队在点击流实时数仓方面的一点实践经验。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Flink和ClickHouse分别是实时计算和（近实时）OLAP领域的翘楚，也是近些年非常火爆的开源框架，很多大厂都在将两者结合使用来构建各种用途的实时平台，效果很好。关于两者的优点就不再赘述，本文来简单介绍笔者团队在点击流实时数仓方面的一点实践经验。<a id="more"></a></p>
 <h3 id="点击流及其维度建模"><a href="#点击流及其维度建模" class="headerlink" title="点击流及其维度建模"></a>点击流及其维度建模</h3><p>所谓点击流（click stream），就是指用户访问网站、App等Web前端时在后端留下的轨迹数据，也是流量分析（traffic analysis）和用户行为分析（user behavior analysis）的基础。点击流数据一般以访问日志和埋点日志的形式存储，其特点是量大、维度丰富。以我们一个中等体量的普通电商平台为例，每天产生约200GB左右、数十亿条的原始日志，埋点事件100+个，涉及50+个维度。<br>按照Kimball的维度建模理论，点击流数仓遵循典型的星形模型。</p>
 <p>点击流数仓分层设计</p>
 <p>点击流实时数仓的分层设计仍然可以借鉴传统数仓的方案，以扁平为上策，尽量减少数据传输中途的延迟。</p>
@@ -152,6 +152,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

@@ -134,8 +134,11 @@
         </li>
     </ul>
     <div class="post-content">
-        <h3 id="实际问题（乱序）"><a href="#实际问题（乱序）" class="headerlink" title="实际问题（乱序）"></a>实际问题（乱序）</h3><p>在介绍Watermark相关内容之前我们先抛出一个具体的问题，在实际的流式计算中数据到来的顺序对计算结果的正确性有至关重要的影响，比如：某数据源中的某些数据由于某种原因(如：网络原因，外部存储自身原因)会有5秒的延时，也就是在实际时间的第1秒产生的数据有可能在第5秒中产生的数据之后到来(比如到Window处理节点).选具体某个delay的元素来说，假设在一个5秒的Tumble窗口(详见Window介绍章节)，有一个EventTime是 11秒的数据，在第16秒时候到来了。图示第11秒的数据，在16秒到来了，如下图：<br><img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/7325C35E-CEE0-4DD0-97BB-BD0190B4F915.png"></p>
+        <h3 id="实际问题（乱序）"><a href="#实际问题（乱序）" class="headerlink" title="实际问题（乱序）"></a>实际问题（乱序）</h3><p>在介绍Watermark相关内容之前我们先抛出一个具体的问题，在实际的流式计算中数据到来的顺序对计算结果的正确性有至关重要的影响，比如：某数据源中的某些数据由于某种原因(如：网络原因，外部存储自身原因)会有5秒的延时，也就是在实际时间的第1秒产生的数据有可能在第5秒中产生的数据之后到来(比如到Window处理节点).选具体某个delay的元素来说，假设在一个5秒的Tumble窗口(详见Window介绍章节)，有一个EventTime是 11秒的数据，在第16秒时候到来了。图示第11秒的数据，在16秒到来了，如下图：</p>
+<p><img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/7325C35E-CEE0-4DD0-97BB-BD0190B4F915.png"></p>
 <p>那么对于一个Count聚合的Tumble(5s)的window，上面的情况如何处理才能window2=4，window3=2 呢？</p>
+<a id="more"></a>
+
 <h3 id="Apache-Flink的时间类型"><a href="#Apache-Flink的时间类型" class="headerlink" title="Apache Flink的时间类型"></a>Apache Flink的时间类型</h3><p>开篇我们描述的问题是一个很常见的TimeWindow中数据乱序的问题，乱序是相对于事件产生时间和到达Apache Flink 实际处理算子的顺序而言的，关于时间在Apache Flink中有如下三种时间类型，如下图：<br><img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/E5D7CBF0-A452-4907-8FCF-F97896C6993A.png"></p>
 <pre><code>ProcessingTime
 是数据流入到具体某个算子时候相应的系统时间。ProcessingTime 有最好的性能和最低的延迟。但在分布式计算环境中ProcessingTime具有不确定性，相同数据流多次运行有可能产生不同的计算结果。
@@ -236,6 +239,10 @@ Punctuated Watermarks - AssignerWithPunctuatedWatermarks</code></pre>
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

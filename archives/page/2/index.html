@@ -139,7 +139,7 @@
                     </ul>
                     
                     <div class="post-content ">
-                        
+                        <h2 id="一、什么是设计模式？"><a href="#一、什么是设计模式？" class="headerlink" title="一、什么是设计模式？"></a>一、什么是设计模式？</h2><p>什么样的程序员是一个好的程序员？学会很多门编程语言，就是一个好的程序员了么？事实上，学会一门编程语言不是一件很难的事，而“学会”一门编程语言是非常难的一件事。前一个“会”强调“能”，懂语法，能写简单的程序就算是前者的“会”了；后一个“会”，强调“精”，显然，光能写出“Hello  World”并不算是后者的“会”，能熟练应用，并用编程语言解决各种问题，才算是真正的“会”。编程语言就像是世界上任何有意义的东西一样，它在一直变化，一直进化，此刻学会的编程语言，到了下一刻，就可能有新东西出来，跟上它进步的节奏，本身就是一件非常费精力的事，更别说去在这个基础上，去“会”第二门编程语言了。因而，个人认为，使用过很多种的编程语言，并不是成为一个好的程序员的充分条件。一个好的程序员，更多的体现不应该在他会使用多少“工具”，而是他能使用这些“工具”，创造多么大的成绩，解决多么大的问题。掌握解决问题的方法，能用自己精通的编程语言解决各种问题，这才是成为一个优秀程序所必备的。</p>
                             <a href="/2020/11/10/%E3%80%90python%E3%80%91python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F--%E5%89%8D%E8%A8%80/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -161,12 +161,8 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="./graph/v2-d942b566bde7c44704b7d03a1b596c0c_720w.jpg">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <h1 id="1-BERT模型"><a href="#1-BERT模型" class="headerlink" title="1. BERT模型"></a>1. BERT模型</h1><p>BERT的全称是Bidirectional Encoder Representation from Transformers，即双向Transformer的Encoder，因为decoder是不能获要预测的信息的。模型的主要创新点都在pre-train方法上，即用了Masked LM(Language Model)和Next Sentence Prediction两种方法分别捕捉词语和句子级别的representation。</p>
                             <a href="/2020/11/02/%E3%80%90NLP%E3%80%91Google-BERT%E5%9F%BA%E7%A1%80%E5%88%9D%E6%AD%A5/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -188,12 +184,10 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/7325C35E-CEE0-4DD0-97BB-BD0190B4F915.png">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <h3 id="实际问题（乱序）"><a href="#实际问题（乱序）" class="headerlink" title="实际问题（乱序）"></a>实际问题（乱序）</h3><p>在介绍Watermark相关内容之前我们先抛出一个具体的问题，在实际的流式计算中数据到来的顺序对计算结果的正确性有至关重要的影响，比如：某数据源中的某些数据由于某种原因(如：网络原因，外部存储自身原因)会有5秒的延时，也就是在实际时间的第1秒产生的数据有可能在第5秒中产生的数据之后到来(比如到Window处理节点).选具体某个delay的元素来说，假设在一个5秒的Tumble窗口(详见Window介绍章节)，有一个EventTime是 11秒的数据，在第16秒时候到来了。图示第11秒的数据，在16秒到来了，如下图：</p>
+<p><img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/7325C35E-CEE0-4DD0-97BB-BD0190B4F915.png"></p>
+<p>那么对于一个Count聚合的Tumble(5s)的window，上面的情况如何处理才能window2=4，window3=2 呢？</p>
                             <a href="/2020/11/02/%E3%80%90flink%E3%80%91Watermark-%E8%A7%A3%E5%86%B3%E4%B9%B1%E5%BA%8F%E9%97%AE%E9%A2%98/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -215,12 +209,8 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="https://enjoyment.cool/2019/01/05/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%E6%A6%82%E8%BF%B0/B995477B-C4CC-4A04-BE20-09C9100725E0.png">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <h2 id="流批统一的计算引擎"><a href="#流批统一的计算引擎" class="headerlink" title="流批统一的计算引擎"></a>流批统一的计算引擎</h2><p>批与流是两种不同的数据处理模式，如Apache Storm只支持流模式的数据处理，Apache Spark只支持批(Micro Batching)模式的数据处理。那么Apache Flink 是如何做到既支持流处理模式也支持批处理模式呢？
                             <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E6%B5%81%E6%89%B9%E7%BB%9F%E4%B8%80/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -243,7 +233,7 @@
                     </ul>
                     
                     <div class="post-content ">
-                        
+                        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Flink和ClickHouse分别是实时计算和（近实时）OLAP领域的翘楚，也是近些年非常火爆的开源框架，很多大厂都在将两者结合使用来构建各种用途的实时平台，效果很好。关于两者的优点就不再赘述，本文来简单介绍笔者团队在点击流实时数仓方面的一点实践经验。
                             <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E5%9F%BA%E4%BA%8EFlink-ClickHouse%E6%89%93%E9%80%A0%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%82%B9%E5%87%BB%E6%B5%81%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -265,12 +255,10 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="https://tvm.apache.org/assets/images/about-image.svg">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <p>前言</p>
+<p>这是一个TVM教程系列，计划从TVM的使用说明，再到TVM的内部源码，为大家大致解析一下TVM的基本工作原理。因为TVM的中文资料比较少，也希望贡献一下自己的力量，如有描述方面的错误，请及时指出。</p>
+<p>那啥是TVM？<br>简单来说，TVM可以称为许多工具集的集合，其中这些工具可以组合起来使用，来实现我们的一些神经网络的加速和部署功能。这也是为什么叫做TVM Stack了。TVM的使用途径很广，几乎可以支持市面上大部分的神经网络权重框架(ONNX、TF、Caffe2等)，也几乎可以部署在任何的平台，例如Windows、Linux、Mac、ARM等等。</p>
                             <a href="/2020/11/02/%E3%80%90TVM%E3%80%91%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E8%A7%A3%E8%AF%BB%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BC%96%E8%AF%91%E5%99%A8TVM/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -292,12 +280,10 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="C:\Users\Administrator\Desktop\flink_sun.png">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <p>流式计算的好处以后慢慢再谈，先打通</p>
+<p><img src="C:\Users\Administrator\Desktop\flink_sun.png"></p>
+<p>抄孙老师的一幅图，不是波场孙老师，也不是齐天大圣，<br>Apache flink PMC 主导pyflink<br>Apache Beam Commiter</p>
                             <a href="/2020/10/30/%E3%80%90flink%E3%80%91%E4%BD%BF%E7%94%A8pyflink%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%8Ekafka%E8%BF%81%E7%A7%BB%E5%88%B0mysql%E5%85%A8%E8%AE%B0%E5%BD%95/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -319,12 +305,8 @@
                         </li>
                     </ul>
                     
-                        <div class="post-cover">
-                            <img src="C:\Users\Administrator\Desktop\15050012808218.jpg">
-                        </div>
-                    
                     <div class="post-content ">
-                        
+                        <h1 id="elasticsearch-机制和架构"><a href="#elasticsearch-机制和架构" class="headerlink" title="elasticsearch 机制和架构"></a>elasticsearch 机制和架构</h1><h3 id="索引结构和分片"><a href="#索引结构和分片" class="headerlink" title="索引结构和分片"></a>索引结构和分片</h3><p>一个文档由 _index 、 _type 和 _id 唯一标识一个文档。<br>_index<br>指向一个或者多个物理 分片 的 逻辑命名空间<br>_type<br>类型用于区分同一个集合中的不同细分，不同的细分中数据的整体模式是相同或相似的，不适合 完全不同类型的数据 ，多个类型可以在相同的索引中存在，只要它们的字段不冲突（对于整个索引，映射在本质上被 扁平化 成一个单一的、全局的模式）。</p>
                             <a href="/2020/10/30/%E3%80%90es%E3%80%91elasticsearch%E6%9C%BA%E5%88%B6%E5%92%8C%E6%9E%B6%E6%9E%84/" class="more-link">Continue reading</a>
                     </div>
         </article>
@@ -359,6 +341,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

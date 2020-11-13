@@ -134,7 +134,10 @@
         </li>
     </ul>
     <div class="post-content">
-        <h2 id="一、快餐点餐系统（1）"><a href="#一、快餐点餐系统（1）" class="headerlink" title="一、快餐点餐系统（1）"></a>一、快餐点餐系统（1）</h2><p>想必大家一定见过类似于麦当劳自助点餐台一类的点餐系统吧。在一个大的触摸显示屏上，有三类可以选择的上餐品：汉堡等主餐、小食、饮料。当我们选择好自己需要的食物，支付完成后，订单就生成了。下面，我们用今天的主角–工厂模式–来生成这些食物的逻辑主体。<br>首先，来看主餐的生成（仅以两种汉堡为例）。</p>
+        <h2 id="一、快餐点餐系统（1）"><a href="#一、快餐点餐系统（1）" class="headerlink" title="一、快餐点餐系统（1）"></a>一、快餐点餐系统（1）</h2><p>想必大家一定见过类似于麦当劳自助点餐台一类的点餐系统吧。在一个大的触摸显示屏上，有三类可以选择的上餐品：汉堡等主餐、小食、饮料。当我们选择好自己需要的食物，支付完成后，订单就生成了。下面，我们用今天的主角–工厂模式–来生成这些食物的逻辑主体。</p>
+<a id="more"></a>
+
+<p>首先，来看主餐的生成（仅以两种汉堡为例）。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Burger</span>():</span></span><br><span class="line">    name=<span class="string">&quot;&quot;</span></span><br><span class="line">    price=<span class="number">0.0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.price</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setPrice</span>(<span class="params">self,price</span>):</span></span><br><span class="line">        self.price=price</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">cheeseBurger</span>(<span class="params">Burger</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.name=<span class="string">&quot;cheese burger&quot;</span></span><br><span class="line">        self.price=<span class="number">10.0</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">spicyChickenBurger</span>(<span class="params">Burger</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.name=<span class="string">&quot;spicy chicken burger&quot;</span></span><br><span class="line">        self.price=<span class="number">15.0</span></span><br></pre></td></tr></table></figure>
 
 <p>其次，是小食。（内容基本一致）</p>
@@ -164,6 +167,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

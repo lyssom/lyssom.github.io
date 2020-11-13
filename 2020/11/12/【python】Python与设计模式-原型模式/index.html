@@ -134,7 +134,10 @@
         </li>
     </ul>
     <div class="post-content">
-        <h2 id="一、图层"><a href="#一、图层" class="headerlink" title="一、图层"></a>一、图层</h2><p>大家如果用过类似于Photoshop的平面设计软件，一定都知道图层的概念。图层概念的提出，使得设计、图形修改等操作更加便利。设计师既可以修改和绘制当前图像对象，又可以保留其它图像对象，逻辑清晰，且可以及时得到反馈。本节内容，将以图层为主角，介绍原型模式。<br>首先，设计一个图层对象。</p>
+        <h2 id="一、图层"><a href="#一、图层" class="headerlink" title="一、图层"></a>一、图层</h2><p>大家如果用过类似于Photoshop的平面设计软件，一定都知道图层的概念。图层概念的提出，使得设计、图形修改等操作更加便利。设计师既可以修改和绘制当前图像对象，又可以保留其它图像对象，逻辑清晰，且可以及时得到反馈。本节内容，将以图层为主角，介绍原型模式。</p>
+<a id="more"></a>
+
+<p>首先，设计一个图层对象。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">simpleLayer</span>:</span></span><br><span class="line">    background=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">    content=<span class="string">&quot;blank&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getContent</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.content</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getBackgroud</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.background</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">paint</span>(<span class="params">self,painting</span>):</span></span><br><span class="line">        self.content=painting</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setParent</span>(<span class="params">self,p</span>):</span></span><br><span class="line">        self.background[<span class="number">3</span>]=p</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fillBackground</span>(<span class="params">self,back</span>):</span></span><br><span class="line">        self.background=back</span><br></pre></td></tr></table></figure>
 
 <p>在实际的实现中，图层实现会很复杂，这里仅介绍相关的设计模式，做了比较大的抽象，用background表示背景的RGBA，简单用content表示内容，除了直接绘画，还可以设置透明度。<br>新建图层，填充蓝底并画一只狗，可以简单表示如下：</p>
@@ -158,6 +161,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 

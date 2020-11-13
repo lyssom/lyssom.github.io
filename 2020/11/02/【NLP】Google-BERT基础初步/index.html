@@ -135,6 +135,8 @@
     </ul>
     <div class="post-content">
         <h1 id="1-BERT模型"><a href="#1-BERT模型" class="headerlink" title="1. BERT模型"></a>1. BERT模型</h1><p>BERT的全称是Bidirectional Encoder Representation from Transformers，即双向Transformer的Encoder，因为decoder是不能获要预测的信息的。模型的主要创新点都在pre-train方法上，即用了Masked LM(Language Model)和Next Sentence Prediction两种方法分别捕捉词语和句子级别的representation。</p>
+<a id="more"></a>
+
 <h2 id="1-1-模型结构"><a href="#1-1-模型结构" class="headerlink" title="1.1 模型结构"></a>1.1 模型结构</h2><p><img src="./graph/v2-d942b566bde7c44704b7d03a1b596c0c_720w.jpg"><br>对比OpenAI GPT(Generative pre-trained transformer)，BERT是双向的Transformer block连接；就像单向rnn和双向rnn的区别，直觉上来讲效果会好一些。<br>对比ELMo，虽然都是“双向”，但目标函数其实是不同的。ELMo是分别以 <img src="https://www.zhihu.com/equation?tex=P(w_i%7C+w_1,+...w_%7Bi-1%7D)">和 <img src="https://www.zhihu.com/equation?tex=P(w_i%7Cw_%7Bi+1%7D,+...w_n)"> 作为目标函数，独立训练处两个representation然后拼接，而BERT则是以 <img src="https://www.zhihu.com/equation?tex=P(w_i%7Cw_1,++...,w_%7Bi-1%7D,+w_%7Bi+1%7D,...,w_n)"> 作为目标函数训练LM。</p>
 <h2 id="1-2-Embedding"><a href="#1-2-Embedding" class="headerlink" title="1.2 Embedding"></a>1.2 Embedding</h2><p>这里的Embedding由三种Embedding求和而成：<br><img src="https://pic2.zhimg.com/80/v2-11505b394299037e999d12997e9d1789_720w.jpg"><br>其中：<br>Token Embeddings是词向量，第一个单词是CLS标志，可以用于之后的分类任务Segment Embeddings用来区别两种句子，因为预训练不光做LM还要做以两个句子为输入的分类任务Position Embeddings和之前文章中的Transformer不一样，不是三角函数而是学习出来的。</p>
 <h2 id="1-3-Pre-training-Task-1-Masked-LM"><a href="#1-3-Pre-training-Task-1-Masked-LM" class="headerlink" title="1.3 Pre-training Task 1#: Masked LM"></a>1.3 Pre-training Task 1#: Masked LM</h2><p>第一步预训练的目标就是做语言模型，从上文模型结构中看到了这个模型的不同，即bidirectional。关于为什么要如此的bidirectional，作者在reddit上做了解释，意思就是如果使用预训练模型处理其他任务，那人们想要的肯定不止某个词左边的信息，而是左右两边的信息。而考虑到这点的模型ELMo只是将left-to-right和right-to-left分别训练拼接起来。直觉上来讲我们其实想要一个deeply bidirectional的模型，但是普通的LM又无法做到，因为在训练时可能会“穿越”（关于这点我不是很认同，之后会发文章讲一下如何做bidirectional LM）。所以作者用了一个加mask的trick。</p>
@@ -161,6 +163,10 @@
             <div class="close"></div>
             <section class="aside-section">
                 
+    <h1>Categories</h1>
+
+    
+
             </section>
             <section class="aside-section">
                 
