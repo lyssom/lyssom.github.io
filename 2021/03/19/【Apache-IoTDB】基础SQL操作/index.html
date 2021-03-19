@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【Apache IoTDB】基础SQL操作
+    </h2>
+    <ul class="post-date">
+        <li>
+            2021-03-19
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <p>源代码编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;iotdb.git</span><br><span class="line">cd iotdb</span><br><span class="line">mvn clean package -pl distribution -am -DskipTests</span><br></pre></td></tr></table></figure>
+
+<p>DDL 数据定义语言</p>
+<p>参考文档：</p>
+<p><a target="_blank" rel="noopener" href="http://iotdb.apache.org/UserGuide/Master/Operation%20Manual/DDL%20Data%20Definition%20Language.html">http://iotdb.apache.org/UserGuide/Master/Operation%20Manual/DDL%20Data%20Definition%20Language.html</a></p>
+<p><strong>存储组操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 创建存储组IoTDB&gt; set storage group to root.turbine</span><br><span class="line"># 查询存储组IoTDB&gt; SHOW STORAGE GROUP</span><br><span class="line">+-------------+</span><br><span class="line">|storage group|</span><br><span class="line">+-------------+</span><br><span class="line">| root.turbine|</span><br><span class="line">+-------------+</span><br><span class="line"># 删除存储组</span><br><span class="line">IoTDB&gt; delete storage group root.turbine</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建时间序列</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create timeseries root.turbine.d1.s1(temperature1) with datatype&#x3D;FLOAT, encoding&#x3D;GORILLA, compression&#x3D;SNAPPY tags(unit&#x3D;degree, owner&#x3D;user1) attributes(description&#x3D;mysensor1, location&#x3D;BeiJing)</span><br><span class="line">create timeseries root.turbine.d1.s2(temperature2) with datatype&#x3D;FLOAT, encoding&#x3D;GORILLA, compression&#x3D;SNAPPY tags(unit&#x3D;degree, owner&#x3D;user1) attributes(description&#x3D;mysensor2, location&#x3D;TianJin)</span><br><span class="line">create timeseries root.turbine.d2.s1(temperature1) with datatype&#x3D;FLOAT, encoding&#x3D;GORILLA, compression&#x3D;SNAPPY tags(unit&#x3D;degree, owner&#x3D;user2) attributes(description&#x3D;mysensor3, location&#x3D;HeBei)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>上边注册的序列可视化就是下边这个图了（手画的。。目前没可视化功能）</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/BgbbbeHYrp5Hc3xUdo26SK0micOiafJ6nKibvHbGoVn8P8ZyHRE6n8GNLqutDT42ClxHpVgeQA6FCiaQHQzBuqcyiag/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>为了实际应用中使用更方便，除了时间序列的路径和编码等基本信息外，我们增加了测点别名、标签、属性三个概念。标签和属性总大小在配置文件中 tag_attribute_total_size 设置。</p>
+<p>别名：测点的别名，可以和测点名一样用来读写，可以不设置。</p>
+<p>标签：key=value 形式，可以通过标签反向查询时间序列元数据，比如，单位和拥有者，标签会常驻内存。目前只能给定一个 tag 查询条件，可精确查询和模糊查询。</p>
+<p>属性：key=value 形式，只能根据时间序列路径展示出属性信息，如描述信息和位置。如果没有反向查询的需求，建议定义成属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 插入更新 别名、标签、属性</span><br><span class="line">ALTER timeseries root.turbine.d1.s1 UPSERT ALIAS&#x3D;newAlias TAGS(unit&#x3D;Degree, owner&#x3D;me) ATTRIBUTES(description&#x3D;ha, newAttr&#x3D;v1)</span><br><span class="line"># 删除时间序列</span><br><span class="line">delete timeseries root.turbine.d2.s1</span><br></pre></td></tr></table></figure>
+
+<p><strong>根据路径和标签查询序列元数据</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 查询所有时间序列数据</span><br><span class="line">IoTDB&gt; show timeseries</span><br></pre></td></tr></table></figure>
+
+<p>查看某个路径的孩子节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; show child paths root.turbine</span><br><span class="line">+---------------+</span><br><span class="line">|    child paths|</span><br><span class="line">+---------------+</span><br><span class="line">|root.turbine.d1|</span><br><span class="line">|root.turbine.d2|</span><br><span class="line">+---------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>统计时间序列数量</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 统计所有时间序列数量</span><br><span class="line">IoTDB&gt; count timeseries</span><br><span class="line">+-----+</span><br><span class="line">|count|</span><br><span class="line">+-----+</span><br><span class="line">|    3|</span><br><span class="line">+-----+</span><br><span class="line"># 分组统计时间序列，root 为第 0 层</span><br><span class="line">IoTDB&gt; count timeseries group by level&#x3D;2</span><br><span class="line">+---------------+-----+</span><br><span class="line">|         column|count|</span><br><span class="line">+---------------+-----+</span><br><span class="line">|root.turbine.d1|    2|</span><br><span class="line">|root.turbine.d2|    1|</span><br><span class="line">+---------------+-----+</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>查询所有设备</strong></p>
+<p>也就是查询倒数第二层节点的路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; show devices</span><br><span class="line">+---------------+</span><br><span class="line">|        devices|</span><br><span class="line">+---------------+</span><br><span class="line">|root.turbine.d1|</span><br><span class="line">|root.turbine.d2|</span><br><span class="line">+---------------+</span><br></pre></td></tr></table></figure>
+
+<p>DML 数据操作语言</p>
+<p>参考文档：</p>
+<p><a target="_blank" rel="noopener" href="http://iotdb.apache.org/UserGuide/Master/Operation%20Manual/DML%20Data%20Manipulation%20Language.html">http://iotdb.apache.org/UserGuide/Master/Operation%20Manual/DML%20Data%20Manipulation%20Language.html</a></p>
+<p><strong>数据写入</strong></p>
+<p>一次可以写入一个设备、一个时间戳、多个测点的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(1,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(2,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(3,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(4,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(5,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(6,1,2);</span><br><span class="line">insert into root.turbine.d1(timestamp,s1,s2) values(10,1,2);</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>数据删除</strong></p>
+<p>目前只支持删除一个时间点之前的数据，之后会支持删除任意一段时间的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">delete from root.turbine.d2.s1 where time &lt;&#x3D; 10</span><br></pre></td></tr></table></figure>
+
+<p><strong>原始数据查询</strong></p>
+<p>接下来就到各种查询啦，最常用的是原始数据查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; select s1, s2 from root.turbine.d1</span><br><span class="line">+-----------------------------+------------------+------------------+</span><br><span class="line">|                         Time|root.turbine.d1.s1|root.turbine.d1.s2|</span><br><span class="line">+-----------------------------+------------------+------------------+</span><br><span class="line">|1970-01-01T08:00:00.001+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.002+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.003+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.004+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.005+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.006+08:00|               1.0|               2.0|</span><br><span class="line">|1970-01-01T08:00:00.010+08:00|               1.0|               2.0|</span><br><span class="line">+-----------------------------+------------------+------------------+</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>单点补空值查询</strong></p>
+<p>传感器采集的数据很多时间戳有偏差，时间戳精确查询容易查不到数据，可以用 previous 或者 linear 方式补空值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; select s1 from root.turbine.d1 where time &#x3D; 8</span><br><span class="line">+----+------------------+</span><br><span class="line">|Time|root.turbine.d1.s1|</span><br><span class="line">+----+------------------+</span><br><span class="line">+----+------------------+</span><br><span class="line"># 用前边最近的值填过来</span><br><span class="line">IoTDB&gt; select s1 from root.turbine.d1 where time &#x3D; 8 fill(float[previous])</span><br><span class="line">+-----------------------------+------------------+</span><br><span class="line">|                         Time|root.turbine.d1.s1|</span><br><span class="line">+-----------------------------+------------------+</span><br><span class="line">|1970-01-01T08:00:00.008+08:00|               1.0|</span><br><span class="line">+-----------------------------+------------------+</span><br><span class="line"># 如果想限制补值的范围，超过这个范围就不补了，可以再加个参数，要带单位</span><br><span class="line">IoTDB&gt; select s1 from root.turbine.d1 where time &#x3D; 8 fill(float[previous,1ms])</span><br><span class="line">+-----------------------------+------------------+</span><br><span class="line">|                         Time|root.turbine.d1.s1|</span><br><span class="line">+-----------------------------+------------------+</span><br><span class="line">|1970-01-01T08:00:00.008+08:00|              null|</span><br><span class="line">+-----------------------------+------------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>最新数据查询</strong></p>
+<p>为了实时的可视化最新数据，我们单独做了一个最新数据点查询功能。用 select last 关键字作为前缀，其他语法和原始数据一样，不能加谓词过滤。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; select last * from root</span><br><span class="line">+-----------------------------+------------------+-----+</span><br><span class="line">|                         Time|        timeseries|value|</span><br><span class="line">+-----------------------------+------------------+-----+</span><br><span class="line">|1970-01-01T08:00:00.010+08:00|root.turbine.d1.s1|  1.0|</span><br><span class="line">|1970-01-01T08:00:00.010+08:00|root.turbine.d1.s2|  2.0|</span><br><span class="line">+-----------------------------+------------------+-----+</span><br></pre></td></tr></table></figure>
+
+<p><strong>聚合查询</strong></p>
+<p>统计时间序列的聚合值，我们目前把各个时间序列都当做独立的序列看待，聚合也是分序列做。下个版本会加上聚合一个路径下所有序列的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; select count(*) from root where time &lt;&#x3D; 10</span><br><span class="line">+-------------------------+-------------------------+-------------------------+</span><br><span class="line">|count(root.turbine.d1.s1)|count(root.turbine.d1.s2)|count(root.turbine.d2.s1)|</span><br><span class="line">+-------------------------+-------------------------+-------------------------+</span><br><span class="line">|                        7|                        7|                        0|</span><br><span class="line">+-------------------------+-------------------------+-------------------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>0.10.0 降频聚合查询</strong></p>
+<p>降频聚合0.10的语法和0.9 的不一样了。首先介绍 0.10.0 版本的降频聚合查询语法，先举个例子，查一个序列今年5月份每天早上9点到12点的平均值，结果应该类似这样的：</p>
+<p>5月1日 9点-12点：聚合值</p>
+<p>5月2日 9点-12点：聚合值</p>
+<p>…</p>
+<p>5月31日 9点-12点：聚合值</p>
+<p>为了实现这个灵活的查询，需要一个滑动窗口，窗口从5月1日9点开始，长度是3小时，每次往前滑动24小时，滑到5月31日为止，每个窗口内计算一个平均值。</p>
+<p>因此我们主要设计了三个参数：</p>
+<p>（1）滑动窗口的起始和终止范围，左闭右开区间：5月1日到31日</p>
+<p>（2）滑动窗口的长度：3小时</p>
+<p>（3）滑动步长：24小时</p>
+<p>语句如下（我没写这么多数据，目前查出来都是空）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select avg(s1) from root.turbine.d1 group by([2020-05-01T09:00:00, 2020-05-31T12:00:00), 3h, 24h)</span><br></pre></td></tr></table></figure>
+
+<p>再举一个更简单的例子：查5月份每天的平均值</p>
+<p>这个例子里，滑动窗口的长度和滑动步长相等，就可以省掉第三个参数啦：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select avg(s1) from root.turbine.d1 group by([2020-05-01T00:00:00, 2020-06-01T00:00:00), 1d)</span><br></pre></td></tr></table></figure>
+
+<p><strong>0.10.0 采样补空值</strong></p>
+<p>0.10.0 新增的查询功能，在 group by 查询的基础上，如果我们使用 last_value 聚合函数，就是个采样功能了，如果某个时间区间没有值，也可以使用前值补空。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 正常降采样，没数据的区间会填充 nullIoTDB&gt; select last_value(s1) from root.turbine.d1 group by([1,10), 2ms)+-----------------------------+------------------------------+|                         Time|last_value(root.turbine.d1.s1)|+-----------------------------+------------------------------+|1970-01-01T08:00:00.001+08:00|                           1.0||1970-01-01T08:00:00.003+08:00|                           1.0||1970-01-01T08:00:00.005+08:00|                           1.0||1970-01-01T08:00:00.007+08:00|                          null||1970-01-01T08:00:00.009+08:00|                          null|+-----------------------------+------------------------------+</span><br><span class="line"># 降采样，如果某个区间没值，可以用前一个聚合值补空，填充函数为 previousIoTDB&gt; select last_value(s1) from root.turbine.d1 group by([1,10), 2ms) fill(float[previous])+-----------------------------+------------------------------+|                         Time|last_value(root.turbine.d1.s1)|+-----------------------------+------------------------------+|1970-01-01T08:00:00.001+08:00|                           1.0||1970-01-01T08:00:00.003+08:00|                           1.0||1970-01-01T08:00:00.005+08:00|                           1.0||1970-01-01T08:00:00.007+08:00|                           1.0||1970-01-01T08:00:00.009+08:00|                           1.0|+-----------------------------+------------------------------+</span><br></pre></td></tr></table></figure>
+
+
+
+<p>此外，还支持另一种补空值方式，previousuntillast，使用前值补空，直到补到最新点的时间值为止，就不再补了，比如这里最新点时间戳是10，11和13这两个点就不再补了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">IoTDB&gt; select last_value(s1) from root.turbine.d1 group by((1,15], 2ms) fill(float[previousuntillast])</span><br><span class="line">+-----------------------------+------------------------------+</span><br><span class="line">|                         Time|last_value(root.turbine.d1.s1)|</span><br><span class="line">+-----------------------------+------------------------------+</span><br><span class="line">|1970-01-01T08:00:00.003+08:00|                           1.0|</span><br><span class="line">|1970-01-01T08:00:00.005+08:00|                           1.0|</span><br><span class="line">|1970-01-01T08:00:00.007+08:00|                           1.0|</span><br><span class="line">|1970-01-01T08:00:00.009+08:00|                           1.0|</span><br><span class="line">|1970-01-01T08:00:00.011+08:00|                           1.0|</span><br><span class="line">|1970-01-01T08:00:00.013+08:00|                          null|</span><br><span class="line">|1970-01-01T08:00:00.015+08:00|                          null|</span><br><span class="line">+-----------------------------+------------------------------+</span><br></pre></td></tr></table></figure>
+
+
+
+<p>不知道大家注意到没，这句话区间是前开后闭，填出来的结果集也是用的闭区间的时间点。这样就通过 group by fill 语句实现了采样补空值查询。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
