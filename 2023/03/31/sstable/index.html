@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="背景 SSTable (Sorted String Table) 是排序字符串表的简称，来源于大名鼎鼎的 Google Bigtable 论文[1]。它用于 Bigtable 内部数据文件的存储，它是一个种高效的 key-value 型文件存储格式。 以下引用论文中对 SSTable 的描述： The Google SSTable file format is used internally to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/03/31/sstable/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景 SSTable (Sorted String Table) 是排序字符串表的简称，来源于大名鼎鼎的 Google Bigtable 论文[1]。它用于 Bigtable 内部数据文件的存储，它是一个种高效的 key-value 型文件存储格式。 以下引用论文中对 SSTable 的描述： The Google SSTable file format is used internally to">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-31T02:45:29.648Z">
+<meta property="article:modified_time" content="2023-03-31T02:45:46.171Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-sstable" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/03/31/sstable/" class="article-date">
+  <time class="dt-published" datetime="2023-03-31T02:45:29.648Z" itemprop="datePublished">2023-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>背景</p>
+<p>SSTable (Sorted String Table) 是排序字符串表的简称，来源于大名鼎鼎的 Google Bigtable 论文[1]。它用于 Bigtable 内部数据文件的存储，它是一个种高效的 key-value 型文件存储格式。</p>
+<p>以下引用论文中对 SSTable 的描述：</p>
+<pre><code>The Google SSTable file format is used internally to store Bigtable data. An SSTable provides a persistent, ordered immutable map from keys to values, where both keys and values are arbitrary byte strings. Operations are provided to look up the value associated with a specified key, and to iterate over all key/value pairs in a specified key range. Internally, each SSTable contains a sequence of blocks (typically each block is 64KB in size, but this is configurable). A block index (stored at the end of the SSTable) is used to locate blocks; the index is loaded into memory when the SSTable is opened. A lookup can be performed with a single disk seek: we first find the appropriate block by performing a binary search in the in-memory index, and then reading the appropriate block from disk. Optionally, an SSTable can be completely mapped into memory, which allows us to perform lookups and scans without touching disk[1]. 
+</code></pre>
+<p>翻译成中文：SSTable 文件用于 Bigtable 内部数据存储。SSTable 文件是一个排序的、不可变的、持久化的 map 结构，其中 map 的 key-value 都可以是任意字节的字符串。支持使用指定键来查找值，或通过给定键范围遍历所有的 key-value 对。每个 SSTable 文件包含一系列的块（一般块大小为64KB，是可配置的）。SSTable 文件中的块索引（这些块索引通常保存在文件尾部区域）用于定位块，这些块索引在 SSTable 文件被打开时加载到内存。在查找时首先从内存中的索引二分查找找到块，然后一次磁盘寻道即可读取到相应的块。另一种方式是将 SSTable 文件完全加载到内存，从而在查找和扫描中就不需要读取磁盘。</p>
+<p>从上面一段描述中，我们知道 SSTable 支持一些关键特性：</p>
+<pre><code>支持海量 key-value 型数据的存储数据是按照 key 排序的、一旦写入就不可变支持指定 key 查询和高效的范围查询索引是稀疏索引的块索引，占用内存空间小
+</code></pre>
+<p>为什么需要 SSTable ?</p>
+<p>我们知道，对于 key-value 类型的数据存储，通常有哈希存储引擎可供使用，它一般使用哈希表索引实现。哈希表索引对单个键的查询非常高效，可以 O(1) 的时间复杂度内完成。但是哈希表索引也有非常明显的缺点：</p>
+<pre><code>哈希表索引必须全部载入内存，由于它是一个稠密索引（对写入的每一条数据都要进行索引），如果存在大量的键，会占用大量内存。原则上，可以在磁盘上维护哈希表索引，但不幸的是，很难在磁盘上实现性能良好的哈希表索引。磁盘上的哈希表索引会产生大量的随机访问 I/O，当哈希表变满时，继续增长代价昂贵，并且哈希冲突时需要复杂的处理逻辑[2]。区间查询效率不高。 
+</code></pre>
+<p>SSTable 可以摆脱这些限制，它非常适合于写量级远大于读量级的情况。目前，SSTable 已经被广泛应用于一些耳熟能详的的存储引擎中，如 Bigtable、Cassandra、Hbase、RocksDB[3]、LevelDB[4]、ScyllaDB[5] 等 key-value 型存储引擎。<br>SSTable 文件结构</p>
+<p>SSTable 文件结构如下[6]（不同的存储引擎具体实现会有差异）：<br>SSTable</p>
+<p>SSTable 本身是个简单而有用的数据结构，而往往由于工业界对于它的过载，导致大家误解。不同厂商对 SSTable 的实现差异还是非常大的。例如 Cassandra 中 SSTable 并不是单一的文件，而是由多个文件如 Data.db、Index.db、Summary.db、Filter.db 等多个文件组成[7]；而LevelDB 的 SSTable 文件就是单一的文件，文件分成数据块、元信息块、索引块等信息[8]。实际上，Google 的 LevelDB 中的 SSTable 的实现是更接近于 Bigtable 论文中的描述。<br>SSTable 段压缩与合并</p>
+<p>每个日志结构的存储段都是一组 key-value 对的序列，按照写入顺序排列，并且对于段内日志中的同一个键，后出现的值优于之前的值。</p>
+<p>当段文件达到一定大小之后就会关闭它，并生成一个新的段文件，一般大小为64KB。随着写入数据的不断追加，段文件不断增多。段内重复的键和段间重复的键不断增多。然后可以在这些段上执行压缩（有些存储引擎叫重写），压缩意味着在日志中丢弃重复的键，仅保留每个键最近的更新。这样既可以使段更小，也可以在执行压缩阶段将段合并，由于段的不变性，合并的时候，需要写入到一个段文件。</p>
+<p>段压缩过程如下[9]：</p>
+<p>同时执行压缩和合并多个段[9]：</p>
+<p>在执行压缩和合并过程中，旧的段并不会被修改，依然可以继续处理读写请求。合并完成之后，就可以安全地删除旧的段文件。</p>
+<p>至于压缩算法，往往采用可配的方式支持。Google 论文[1]中提到可以采用”两遍”方式：第一个遍采用 Bentley and McIlroy’s 方式，这种方式在一个很大的扫描窗口里对常见的长字 符串进行压缩；第二遍采用快速压缩算法，即在一个16KB的小扫描窗口中寻找重复数据。<br>为什么 SSTable 是不可变的？</p>
+<p>不可变的段文件，对于并发控制和奔溃恢复非常友好。<br>参考</p>
+<pre><code>^abcBigtable: A Distributed Storage System for Structured Data https://research.google/pubs/pub27898/^Modern B-Tree Techniques https://www.amazon.com/Modern-B-Tree-Techniques-Foundations-Databases/dp/1601984820^A Tutorial of RocksDB SST formats https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats^LevelDB源码剖析之SSTable https://www.jianshu.com/p/1ed0b94e8a2c^Scylla SSTable Format https://docs.scylladb.com/architecture/sstable/^Database storage engines under the hood https://medium.com/@shashankbaravani/database-storage-engines-under-the-hood-705418dc0e35^SSTables http://cassandra.apache.org/doc/latest/architecture/storage_engine.html#sstables^leveldb中的SSTable https://bean-li.github.io/leveldb-sstable/^abChatper 3. Storage and Retrieval https://notes.shichao.io/dda/ch3/
+</code></pre>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/03/31/sstable/" data-id="clfvy8p2j0000wwx0fqetgy42" data-title="" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/03/31/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/03/31/sstable/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/03/31/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
