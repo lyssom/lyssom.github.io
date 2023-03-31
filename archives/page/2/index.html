@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            
+<section class="posts">
+    
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--观察者模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 26, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、火警报警器（2）"><a href="#一、火警报警器（2）" class="headerlink" title="一、火警报警器（2）"></a>一、火警报警器（2）</h2><p>在门面模式中，我们提到过火警报警器。在当时，我们关注的是通过封装减少代码重复。而今天，我们将从业务流程的实现角度，来再次实现该火警报警器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AlarmSensor</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Alarm Ring...&quot;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WaterSprinker</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Spray Water...&quot;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmergencyDialer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Dial 119...&quot;</span></span><br></pre></td></tr></table></figure>
+                            <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--访问者模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 26, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、药房业务系统"><a href="#一、药房业务系统" class="headerlink" title="一、药房业务系统"></a>一、药房业务系统</h2><p>假设一个药房，有一些大夫，一个药品划价员和一个药房管理员，它们通过一个药房管理系统组织工作流程。大夫开出药方后，药品划价员确定药品是否正常，价格是否正确；通过后药房管理员进行开药处理。该系统可以如何实现？最简单的想法，是分别用一个一个if…else…把划价员处理流程和药房管理流程实现，这样做的问题在于，扩展性不强，而且单一性不强，一旦有新药的加入或者划价流程、开药流程有些变动，会牵扯比较多的改动。今天介绍一种解决这类问题的模式：访问者模式。<br>首先，构造药品类和工作人员类：</p>
+                            <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--迭代器模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 26, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、迭代器与生成器"><a href="#一、迭代器与生成器" class="headerlink" title="一、迭代器与生成器"></a>一、迭代器与生成器</h2><p>今天的主角是迭代器模式。在python中，迭代器并不用举太多的例子，因为python中的迭代器应用实在太多了（不管是python还是其它很多的编程语言中，实际上迭代器都已经纳入到了常用的库或者包中）。而且在当前，也几乎没有人专门去开发一个迭代器，而是直接去使用list、string、set、dict等python可迭代对象，或者直接使用__iter__和next函数来实现迭代器。如下例：</p>
+                            <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--模板模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 26, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、股票查询客户端"><a href="#一、股票查询客户端" class="headerlink" title="一、股票查询客户端"></a>一、股票查询客户端</h2><p>投资股票是种常见的理财方式，我国股民越来越多，实时查询股票的需求也越来越大。今天，我们通过一个简单的股票查询客户端来认识一种简单的设计模式：模板模式。</p>
+                            <a href="/2020/11/26/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--中介者模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--命令模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--责任链模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--策略模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、客户消息通知"><a href="#一、客户消息通知" class="headerlink" title="一、客户消息通知"></a>一、客户消息通知</h2><p>假设某司维护着一些客户资料，需要在该司有新产品上市或者举行新活动时通知客户。现通知客户的方式有两种：短信通知、邮件通知。应如何设计该系统的客户通知部分？为解决该问题，我们先构造客户类，包括客户常用的联系方式和基本信息，同时也包括要发送的内容。</p>
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--桥梁模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、画笔与形状"><a href="#一、画笔与形状" class="headerlink" title="一、画笔与形状"></a>一、画笔与形状</h2><p>在介绍原型模式的一节中，我们举了个图层的例子，这一小节内容，我们同样以类似画图的例子，说明一种结构类设计模式：桥梁模式。<br>在一个画图程序中，常会见到这样的情况：有一些预设的图形，如矩形、圆形等，还有一个对象-画笔，调节画笔的类型（如画笔还是画刷，还是毛笔效果等）并设定参数（如颜色、线宽等），选定图形，就可以在画布上画出想要的图形了。要实现以上需求，先从最抽象的元素开始设计，即形状和画笔（暂时忽略画布，同时忽略画笔参数，只考虑画笔类型）。</p>
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">
+                            【python】Python与设计模式--享元模式
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 13, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="一、网上咖啡选购平台"><a href="#一、网上咖啡选购平台" class="headerlink" title="一、网上咖啡选购平台"></a>一、网上咖啡选购平台</h2><p>假设有一个网上咖啡选购平台，客户可以在该平台上下订单订购咖啡，平台会根据用户位置进行线下配送。假设其咖啡对象构造如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Coffee</span>:</span></span><br><span class="line">    name = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    price =<span class="number">0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.price = <span class="built_in">len</span>(name)<span class="comment">#在实际业务中，咖啡价格应该是由配置表进行配置，或者调用接口获取等方式得到，此处为说明享元模式，将咖啡价格定为名称长度，只是一种简化</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Coffee Name:%s Price:%s&quot;</span>%(self.name,self.price)</span><br></pre></td></tr></table></figure>
+
+<p>其对应的顾客类如下：</p>
+                            <a href="/2020/11/13/%E3%80%90python%E3%80%91Python%E4%B8%8E%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+</section>
+
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

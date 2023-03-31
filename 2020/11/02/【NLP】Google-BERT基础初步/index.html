@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【NLP】Google BERT基础初步
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-02
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h1 id="1-BERT模型"><a href="#1-BERT模型" class="headerlink" title="1. BERT模型"></a>1. BERT模型</h1><p>BERT的全称是Bidirectional Encoder Representation from Transformers，即双向Transformer的Encoder，因为decoder是不能获要预测的信息的。模型的主要创新点都在pre-train方法上，即用了Masked LM(Language Model)和Next Sentence Prediction两种方法分别捕捉词语和句子级别的representation。</p>
+<a id="more"></a>
+
+<h2 id="1-1-模型结构"><a href="#1-1-模型结构" class="headerlink" title="1.1 模型结构"></a>1.1 模型结构</h2><p><img src="./graph/v2-d942b566bde7c44704b7d03a1b596c0c_720w.jpg"><br>对比OpenAI GPT(Generative pre-trained transformer)，BERT是双向的Transformer block连接；就像单向rnn和双向rnn的区别，直觉上来讲效果会好一些。<br>对比ELMo，虽然都是“双向”，但目标函数其实是不同的。ELMo是分别以 <img src="https://www.zhihu.com/equation?tex=P(w_i%7C+w_1,+...w_%7Bi-1%7D)">和 <img src="https://www.zhihu.com/equation?tex=P(w_i%7Cw_%7Bi+1%7D,+...w_n)"> 作为目标函数，独立训练处两个representation然后拼接，而BERT则是以 <img src="https://www.zhihu.com/equation?tex=P(w_i%7Cw_1,++...,w_%7Bi-1%7D,+w_%7Bi+1%7D,...,w_n)"> 作为目标函数训练LM。</p>
+<h2 id="1-2-Embedding"><a href="#1-2-Embedding" class="headerlink" title="1.2 Embedding"></a>1.2 Embedding</h2><p>这里的Embedding由三种Embedding求和而成：<br><img src="https://pic2.zhimg.com/80/v2-11505b394299037e999d12997e9d1789_720w.jpg"><br>其中：<br>Token Embeddings是词向量，第一个单词是CLS标志，可以用于之后的分类任务Segment Embeddings用来区别两种句子，因为预训练不光做LM还要做以两个句子为输入的分类任务Position Embeddings和之前文章中的Transformer不一样，不是三角函数而是学习出来的。</p>
+<h2 id="1-3-Pre-training-Task-1-Masked-LM"><a href="#1-3-Pre-training-Task-1-Masked-LM" class="headerlink" title="1.3 Pre-training Task 1#: Masked LM"></a>1.3 Pre-training Task 1#: Masked LM</h2><p>第一步预训练的目标就是做语言模型，从上文模型结构中看到了这个模型的不同，即bidirectional。关于为什么要如此的bidirectional，作者在reddit上做了解释，意思就是如果使用预训练模型处理其他任务，那人们想要的肯定不止某个词左边的信息，而是左右两边的信息。而考虑到这点的模型ELMo只是将left-to-right和right-to-left分别训练拼接起来。直觉上来讲我们其实想要一个deeply bidirectional的模型，但是普通的LM又无法做到，因为在训练时可能会“穿越”（关于这点我不是很认同，之后会发文章讲一下如何做bidirectional LM）。所以作者用了一个加mask的trick。</p>
+<p>在训练过程中作者随机mask 15%的token，而不是把像cbow一样把每个词都预测一遍。最终的损失函数只计算被mask掉那个token。</p>
+<p>Mask如何做也是有技巧的，如果一直用标记[MASK]代替（在实际预测时是碰不到这个标记的）会影响模型，所以随机mask的时候10%的单词会被替代成其他单词，10%的单词不替换，剩下80%才被替换为[MASK]。具体为什么这么分配，作者没有说。。。要注意的是Masked LM预训练阶段模型是不知道真正被mask的是哪个词，所以模型每个词都要关注。</p>
+<p>因为序列长度太大（512）会影响训练速度，所以90%的steps都用seq_len=128训练，余下的10%步数训练512长度的输入。</p>
+<h2 id="1-4-Pre-training-Task-2-Next-Sentence-Prediction"><a href="#1-4-Pre-training-Task-2-Next-Sentence-Prediction" class="headerlink" title="1.4 Pre-training Task 2#: Next Sentence Prediction"></a>1.4 Pre-training Task 2#: Next Sentence Prediction</h2><p>因为涉及到QA和NLI之类的任务，增加了第二个预训练任务，目的是让模型理解两个句子之间的联系。训练的输入是句子A和B，B有一半的几率是A的下一句，输入这两个句子，模型预测B是不是A的下一句。预训练的时候可以达到97-98%的准确度。</p>
+<p>注意：作者特意说了语料的选取很关键，要选用document-level的而不是sentence-level的，这样可以具备抽象连续长序列特征的能力。</p>
+<h2 id="1-5-Fine-tunning"><a href="#1-5-Fine-tunning" class="headerlink" title="1.5 Fine-tunning"></a>1.5 Fine-tunning</h2><p>分类：对于sequence-level的分类任务，BERT直接取第一个[CLS]token的final hidden state <img src="https://www.zhihu.com/equation?tex=C%5Cin%5CRe%5EH"> ，加一层权重 <img src="https://www.zhihu.com/equation?tex=W%5Cin%5CRe%5E%7BK%5Ctimes+H%7D"> 后softmax预测label proba：<br>    <img src="https://www.zhihu.com/equation?tex=P=softmax(CW%5ET)+%5C%5C"></p>
+<p>其他预测任务需要进行一些调整，如图：<br><img src="https://pic2.zhimg.com/80/v2-b054e303cdafa0ce41ad761d5d0314e1_720w.jpg"></p>
+<p>可以调整的参数和取值范围有：</p>
+<pre><code>Batch size: 16, 32Learning rate (Adam): 5e-5, 3e-5, 2e-5Number of epochs: 3, 4</code></pre>
+<p>因为大部分参数都和预训练时一样，精调会快一些，所以作者推荐多试一些参数。</p>
+<h1 id="2-优缺点"><a href="#2-优缺点" class="headerlink" title="2. 优缺点"></a>2. 优缺点</h1><h2 id="2-1-优点"><a href="#2-1-优点" class="headerlink" title="2.1 优点"></a>2.1 优点</h2><p>BERT是截至2018年10月的最新state of the art模型，通过预训练和精调横扫了11项NLP任务，这首先就是最大的优点了。而且它还用的是Transformer，也就是相对rnn更加高效、能捕捉更长距离的依赖。对比起之前的预训练模型，它捕捉到的是真正意义上的bidirectional context信息。</p>
+<h2 id="2-2-缺点"><a href="#2-2-缺点" class="headerlink" title="2.2 缺点"></a>2.2 缺点</h2><p>作者在文中主要提到的就是MLM预训练时的mask问题：</p>
+<pre><code>[MASK]标记在实际预测中不会出现，训练时用过多[MASK]影响模型表现
+每个batch只有15%的token被预测，所以BERT收敛得比left-to-right模型要慢（它们会预测每个token）</code></pre>
+<h1 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h1><p>BERT大火，很多人说用到的都是现有的东西，没想到效果会这么好，可是别人又没想到。从不过文章中没有具体解释的很多点，可以猜测算法是通过不断地实验得出的，而且训练的数据也比类似结构的OpenAI GPT多，所以数据、模型结构，都是不可或缺的东西。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

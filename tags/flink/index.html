@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            
+<section class="posts">
+    
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2021/01/14/%E3%80%90compute%E3%80%91exactly-once%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/">
+                            【compute】exactly once到底是什么
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            January 14, 2021
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <p>分布式事件流处理正逐渐成为大数据领域中一个热门话题。著名的流处理引擎（Streaming Processing Engines， SPEs）包括Apache Storm、Apache Flink、Heron、Apache Kafka（Kafka Streams）以及Apache Spark（Spark Streaming）。流处理引擎中一个著名的且经常被广泛讨论的特征是它们的处理语义，而“exactly-once”是其中最受欢迎的，同时也有很多引擎声称它们提供“exactly-once”处理语义。</p>
+<p>然而，围绕着“exactly-once”究竟是什么、它牵扯到什么以及当流处理引擎声称提供“exactly-once”语义时它究竟意味着什么，仍然存在着很多误解与歧义。而用来描述处理语义的“exactly-once”这一标签同样也是非常误导人的。在这篇博文当中，我将会讨论众多受欢迎的引擎所提供的“exactly-once”语义间的不同之处，以及为什么“exactly-once”更好的描述是“effective-once”。我还会讨论用来实现“exactly-once”的常用技术间的权衡（tradeoffs）</p>
+                            <a href="/2021/01/14/%E3%80%90compute%E3%80%91exactly-once%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/02/%E3%80%90flink%E3%80%91Watermark-%E8%A7%A3%E5%86%B3%E4%B9%B1%E5%BA%8F%E9%97%AE%E9%A2%98/">
+                            【flink】Watermark 解决乱序问题
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 2, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h3 id="实际问题（乱序）"><a href="#实际问题（乱序）" class="headerlink" title="实际问题（乱序）"></a>实际问题（乱序）</h3><p>在介绍Watermark相关内容之前我们先抛出一个具体的问题，在实际的流式计算中数据到来的顺序对计算结果的正确性有至关重要的影响，比如：某数据源中的某些数据由于某种原因(如：网络原因，外部存储自身原因)会有5秒的延时，也就是在实际时间的第1秒产生的数据有可能在第5秒中产生的数据之后到来(比如到Window处理节点).选具体某个delay的元素来说，假设在一个5秒的Tumble窗口(详见Window介绍章节)，有一个EventTime是 11秒的数据，在第16秒时候到来了。图示第11秒的数据，在16秒到来了，如下图：</p>
+<p><img src="https://enjoyment.cool/2019/01/01/Apache%20Flink%20%E6%BC%AB%E8%B0%88%E7%B3%BB%E5%88%97%20-%20%20Watermark/7325C35E-CEE0-4DD0-97BB-BD0190B4F915.png"></p>
+<p>那么对于一个Count聚合的Tumble(5s)的window，上面的情况如何处理才能window2=4，window3=2 呢？</p>
+                            <a href="/2020/11/02/%E3%80%90flink%E3%80%91Watermark-%E8%A7%A3%E5%86%B3%E4%B9%B1%E5%BA%8F%E9%97%AE%E9%A2%98/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E6%B5%81%E6%89%B9%E7%BB%9F%E4%B8%80/">
+                            【flink】流批统一
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 2, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h2 id="流批统一的计算引擎"><a href="#流批统一的计算引擎" class="headerlink" title="流批统一的计算引擎"></a>流批统一的计算引擎</h2><p>批与流是两种不同的数据处理模式，如Apache Storm只支持流模式的数据处理，Apache Spark只支持批(Micro Batching)模式的数据处理。那么Apache Flink 是如何做到既支持流处理模式也支持批处理模式呢？
+                            <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E6%B5%81%E6%89%B9%E7%BB%9F%E4%B8%80/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E5%9F%BA%E4%BA%8EFlink-ClickHouse%E6%89%93%E9%80%A0%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%82%B9%E5%87%BB%E6%B5%81%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93/">
+                            【flink】基于Flink+ClickHouse打造轻量级点击流实时数仓
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            November 2, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>Flink和ClickHouse分别是实时计算和（近实时）OLAP领域的翘楚，也是近些年非常火爆的开源框架，很多大厂都在将两者结合使用来构建各种用途的实时平台，效果很好。关于两者的优点就不再赘述，本文来简单介绍笔者团队在点击流实时数仓方面的一点实践经验。
+                            <a href="/2020/11/02/%E3%80%90flink%E3%80%91%E5%9F%BA%E4%BA%8EFlink-ClickHouse%E6%89%93%E9%80%A0%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%82%B9%E5%87%BB%E6%B5%81%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+        <article class="post">
+            
+                    <h1 class="post-title">
+                        <a href="/2020/10/30/%E3%80%90flink%E3%80%91%E4%BD%BF%E7%94%A8pyflink%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%8Ekafka%E8%BF%81%E7%A7%BB%E5%88%B0mysql%E5%85%A8%E8%AE%B0%E5%BD%95/">
+                            【flink】使用pyflink将数据从kafka迁移到mysql全记录
+                        </a>
+                    </h1>
+
+                    <ul class="post-date">
+                        <li>
+                            October 30, 2020
+                        </li>
+                        <li>
+                            liuyu
+                        </li>
+                    </ul>
+                    
+                    <div class="post-content ">
+                        <p>流式计算的好处以后慢慢再谈，先打通</p>
+<p><img src="C:\Users\Administrator\Desktop\flink_sun.png"></p>
+<p>抄孙老师的一幅图，不是波场孙老师，也不是齐天大圣，<br>Apache flink PMC 主导pyflink<br>Apache Beam Commiter</p>
+                            <a href="/2020/10/30/%E3%80%90flink%E3%80%91%E4%BD%BF%E7%94%A8pyflink%E5%B0%86%E6%95%B0%E6%8D%AE%E4%BB%8Ekafka%E8%BF%81%E7%A7%BB%E5%88%B0mysql%E5%85%A8%E8%AE%B0%E5%BD%95/" class="more-link">Continue reading</a>
+                    </div>
+        </article>
+        
+</section>
+
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

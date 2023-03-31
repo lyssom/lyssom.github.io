@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【python】Python与设计模式--模板模式
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-26
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="一、股票查询客户端"><a href="#一、股票查询客户端" class="headerlink" title="一、股票查询客户端"></a>一、股票查询客户端</h2><p>投资股票是种常见的理财方式，我国股民越来越多，实时查询股票的需求也越来越大。今天，我们通过一个简单的股票查询客户端来认识一种简单的设计模式：模板模式。</p>
+<a id="more"></a>
+
+<p>根据股票代码来查询股价分为如下几个步骤：登录、设置股票代码、查询、展示。构造如下的虚拟股票查询器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StockQueryDevice</span>():</span></span><br><span class="line">    stock_code=<span class="string">&quot;0&quot;</span></span><br><span class="line">    stock_price=<span class="number">0.0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">self,usr,pwd</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setCode</span>(<span class="params">self,code</span>):</span></span><br><span class="line">        self.stock_code=code</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">showPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>现在查询机构很多，我们可以根据不同的查询机构和查询方式，来通过继承的方式实现其对应的股票查询器类。例如，WebA和WebB的查询器类可以构造如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebAStockQueryDevice</span>(<span class="params">StockQueryDevice</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">self,usr,pwd</span>):</span></span><br><span class="line">        <span class="keyword">if</span> usr==<span class="string">&quot;myStockA&quot;</span> <span class="keyword">and</span> pwd==<span class="string">&quot;myPwdA&quot;</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Web A:Login OK... user:%s pwd:%s&quot;</span>%(usr,pwd)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Web A:Login ERROR... user:%s pwd:%s&quot;</span>%(usr,pwd)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Web A Querying...code:%s &quot;</span>%self.stock_code</span><br><span class="line">        self.stock_price=<span class="number">20.00</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">showPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Web A Stock Price...code:%s price:%s&quot;</span>%(self.stock_code,self.stock_price)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebBStockQueryDevice</span>(<span class="params">StockQueryDevice</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">self,usr,pwd</span>):</span></span><br><span class="line">        <span class="keyword">if</span> usr==<span class="string">&quot;myStockB&quot;</span> <span class="keyword">and</span> pwd==<span class="string">&quot;myPwdB&quot;</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Web B:Login OK... user:%s pwd:%s&quot;</span>%(usr,pwd)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Web B:Login ERROR... user:%s pwd:%s&quot;</span>%(usr,pwd)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Web B Querying...code:%s &quot;</span>%self.stock_code</span><br><span class="line">        self.stock_price=<span class="number">30.00</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">showPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Web B Stock Price...code:%s price:%s&quot;</span>%(self.stock_code,self.stock_price)</span><br></pre></td></tr></table></figure>
+
+<p>在场景中，想要在网站A上查询股票，需要进行如下操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    web_a_query_dev=WebAStockQueryDevice()</span><br><span class="line">    web_a_query_dev.login(<span class="string">&quot;myStockA&quot;</span>,<span class="string">&quot;myPwdA&quot;</span>)</span><br><span class="line">    web_a_query_dev.setCode(<span class="string">&quot;12345&quot;</span>)</span><br><span class="line">    web_a_query_dev.queryPrice()</span><br><span class="line">    web_a_query_dev.showPrice()</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下：<br>Web A:Login OK… user:myStockA pwd:myPwdA<br>Web A Querying…code:12345<br>Web A Stock Price…code:12345 price:20.0<br>每次操作，都会调用登录，设置代码，查询，展示这几步，是不是有些繁琐？既然有些繁琐，何不将这几步过程封装成一个接口。由于各个子类中的操作过程基本满足这个流程，所以这个方法可以写在父类中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StockQueryDevice</span>():</span></span><br><span class="line">    stock_code=<span class="string">&quot;0&quot;</span></span><br><span class="line">    stock_price=<span class="number">0.0</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">self,usr,pwd</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setCode</span>(<span class="params">self,code</span>):</span></span><br><span class="line">        self.stock_code=code</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">queryPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">showPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">operateQuery</span>(<span class="params">self,usr,pwd,code</span>):</span></span><br><span class="line">        self.login(usr,pwd)</span><br><span class="line">        self.setCode(code)</span><br><span class="line">        self.queryPrice()</span><br><span class="line">        self.showPrice()</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>这样，在业务场景中，就可以通过operateQuery一气呵成了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    web_a_query_dev=WebAStockQueryDevice()</span><br><span class="line">    web_a_query_dev.operateQuery(<span class="string">&quot;myStockA&quot;</span>,<span class="string">&quot;myPwdA&quot;</span>,<span class="string">&quot;12345&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这种基本每个程序员都会想到的解决方案，就是模板模式。很简单吧。<br>但也许你会问，登录并不一定每次都会成功呀？是的，所以在operateQuery接口中需要做一重判断，写成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">operateQuery</span>(<span class="params">self,usr,pwd,code</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self.login(usr,pwd):</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    self.setCode(code)</span><br><span class="line">    self.queryPrice()</span><br><span class="line">    self.showPrice()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>在模板模式中，像这样类似于login等根据特定情况，定制某些特定动作的函数，被称作钩子函数。此例中，如果登录失败（user：myStock B，pwd:myPwdA），会打印如下结果：<br>Web A:Login ERROR… user:myStockB pwd:myPwdA</p>
+<h2 id="二、模板模式"><a href="#二、模板模式" class="headerlink" title="二、模板模式"></a>二、模板模式</h2><p>模板模式定义如下：定义一个操作中的算法的框架，而将一些步骤延迟到子类中，使得子类可以不改变一个算法的结构即可重新定义该算法的某些特定的步骤。子类实现的具体方法叫作基本方法，实现对基本方法高度的框架方法，叫作模板方法。<br><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d16b20951fd65bf43e102bfdc5c31e5d.png" alt="f1.png"></p>
+<h2 id="三、模板模式的优点和应用"><a href="#三、模板模式的优点和应用" class="headerlink" title="三、模板模式的优点和应用"></a>三、模板模式的优点和应用</h2><p>优点：<br>1、可变的部分可以充分扩展，不变的步骤可以充分封装；<br>2、提取公共代码，减少冗余代码，便于维护；<br>3、具体过程可以定制，总体流程方便掌控。<br>使用场景：<br>1、某超类的子类中有公有的方法，并且逻辑基本相同，可以使用模板模式。必要时可以使用钩子方法约束其行为。具体如本节例子；<br>2、比较复杂的算法，可以把核心算法提取出来，周边功能在子类中实现。例如，机器学习中的监督学习算法有很多，如决策树、KNN、SVM等，但机器学习的流程大致相同，都包含输入样本、拟合（fit）、预测等过程，这样就可以把这些过程提取出来，构造模板方法，并通过钩子方法控制流程。</p>
+<h2 id="四、模板模式的缺点"><a href="#四、模板模式的缺点" class="headerlink" title="四、模板模式的缺点"></a>四、模板模式的缺点</h2><p>1、模板模式在抽象类中定义了子类的方法，即子类对父类产生了影响，部分影响了代码的可读性。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

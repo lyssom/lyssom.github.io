@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【python】Python与设计模式--装饰器模式
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-12
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="一、快餐点餐系统（3）"><a href="#一、快餐点餐系统（3）" class="headerlink" title="一、快餐点餐系统（3）"></a>一、快餐点餐系统（3）</h2><p>又提到了那个快餐点餐系统，不过今天我们只以其中的一个类作为主角：饮料类。首先，回忆下饮料类：</p>
+<a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Beverage</span>():</span></span><br><span class="line">    name = <span class="string">&quot;&quot;</span></span><br><span class="line">    price = <span class="number">0.0</span></span><br><span class="line">    <span class="built_in">type</span> = <span class="string">&quot;BEVERAGE&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.price</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setPrice</span>(<span class="params">self, price</span>):</span></span><br><span class="line">        self.price = price</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">coke</span>(<span class="params">Beverage</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.name = <span class="string">&quot;coke&quot;</span></span><br><span class="line">        self.price = <span class="number">4.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">milk</span>(<span class="params">Beverage</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.name = <span class="string">&quot;milk&quot;</span></span><br><span class="line">        self.price = <span class="number">5.0</span></span><br></pre></td></tr></table></figure>
+
+<p>除了基本配置，快餐店卖可乐时，可以选择加冰，如果加冰的话，要在原价上加0.3元；卖牛奶时，可以选择加糖，如果加糖的话，要原价上加0.5元。怎么解决这样的问题？可以选择装饰器模式来解决这一类的问题。首先，定义装饰器类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">drinkDecorator</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">iceDecorator</span>(<span class="params">drinkDecorator</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,beverage</span>):</span></span><br><span class="line">        self.beverage=beverage</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.beverage.getName()+<span class="string">&quot; +ice&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.beverage.getPrice()+<span class="number">0.3</span></span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">sugarDecorator</span>(<span class="params">drinkDecorator</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,beverage</span>):</span></span><br><span class="line">        self.beverage=beverage</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.beverage.getName()+<span class="string">&quot; +sugar&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPrice</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.beverage.getPrice()+<span class="number">0.5</span></span><br></pre></td></tr></table></figure>
+
+<p>构建好装饰器后，在具体的业务场景中，就可以与饮料类进行关联。以可乐+冰为例，示例业务场景如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    coke_cola=coke()</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Name:%s&quot;</span>%coke_cola.getName()</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Price:%s&quot;</span>%coke_cola.getPrice()</span><br><span class="line">    ice_coke=iceDecorator(coke_cola)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Name:%s&quot;</span> % ice_coke.getName()</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;Price:%s&quot;</span> % ice_coke.getPrice()</span><br></pre></td></tr></table></figure>
+
+<p>打印结果如下：<br>Name:coke<br>Price:4.0<br>Name:coke +ice<br>Price:4.3</p>
+<h2 id="二、装饰器模式"><a href="#二、装饰器模式" class="headerlink" title="二、装饰器模式"></a>二、装饰器模式</h2><p>装饰器模式定义如下：动态地给一个对象添加一些额外的职责。在增加功能方面，装饰器模式比生成子类更为灵活。<br><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/6c8cc57b36c5772c0bc489221c648819.png" alt="f1.png"><br>装饰器模式和上一节说到的代理模式非常相似，可以认为，装饰器模式就是代理模式的一个特殊应用，两者的共同点是都具有相同的接口，不同点是侧重对主题类的过程的控制，而装饰模式则侧重对类功能的加强或减弱。<br>上一次说到，JAVA中的动态代理模式，是实现AOP的重要手段。而在Python中，AOP通过装饰器模式实现更为简洁和方便。<br>先来解释一下什么是AOP。AOP即Aspect Oriented  Programming，中文翻译为面向切面的编程，它的含义可以解释为：如果几个或更多个逻辑过程中（这类逻辑过程可能位于不同的对象，不同的接口当中），有重复的操作行为，就可以将这些行为提取出来（即形成切面），进行统一管理和维护。举例子说，系统中需要在各个地方打印日志，就可以将打印日志这一操作提取出来，作为切面进行统一维护。<br>从编程思想的关系来看，可以认为AOP和OOP（面向对象的编程）是并列关系，二者是可以替换的，也可以结合起来用。实际上，在Python语言中，是天然支持装饰器的，如下例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span>(<span class="params">func</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kw</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;call %s():&#x27;</span> % func.__name__</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kw)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@log</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">now</span>():</span></span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;2016-12-04&#x27;</span></span><br><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    now()</span><br></pre></td></tr></table></figure>
+
+<p>打印如下：<br>call now():<br>2016-12-04<br>log接口就是装饰器的定义，而Python的@语法部分则直接支持装饰器的使用。<br>如果要在快餐点餐系统中打印日志，该如何进行AOP改造呢？可以借助类的静态方法或者类方法来实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogManager</span>:</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">log</span>(<span class="params">func</span>):</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args</span>):</span></span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;Visit Func %s&quot;</span>%func.__name__</span><br><span class="line">            <span class="keyword">return</span> func(*args)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p>在需要打印日志的地方直接@LogManager.log，即可打印出访问的日志信息。如，在beverage类的函数前加上@LogManager.log，场景类保持不变，则打印结果如下：<br>Visit Func getName<br>Name:coke<br>Visit Func getPrice<br>Price:4.0<br>Visit Func getName<br>Name:coke +ice<br>Visit Func getPrice<br>Price:4.3</p>
+<h2 id="三、装饰器模式的优点和应用场景"><a href="#三、装饰器模式的优点和应用场景" class="headerlink" title="三、装饰器模式的优点和应用场景"></a>三、装饰器模式的优点和应用场景</h2><p>优点：<br>1、装饰器模式是继承方式的一个替代方案，可以轻量级的扩展被装饰对象的功能；<br>2、Python的装饰器模式是实现AOP的一种方式，便于相同操作位于不同调用位置的统一管理。<br>应用场景：<br>1、需要扩展、增强或者减弱一个类的功能，如本例。</p>
+<h2 id="四、装饰器模式的缺点"><a href="#四、装饰器模式的缺点" class="headerlink" title="四、装饰器模式的缺点"></a>四、装饰器模式的缺点</h2><p>1、多层装饰器的调试和维护有比较大的困难。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

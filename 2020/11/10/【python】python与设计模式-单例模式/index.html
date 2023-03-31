@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【python】python与设计模式--单例模式
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-10
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="一、总线"><a href="#一、总线" class="headerlink" title="一、总线"></a>一、总线</h2><p>总线是计算机各种功能部件或者设备之间传送数据、控制信号等信息的公共通信解决方案之一。现假设有如下场景：某中央处理器（CPU）通过某种协议总线与一个信号灯相连，信号灯有64种颜色可以设置，中央处理器上运行着三个线程，都可以对这个信号灯进行控制，并且可以独立设置该信号灯的颜色。抽象掉协议细节（用打印表示），如何实现线程对信号等的控制逻辑。<br>加线程锁进行控制，无疑是最先想到的方法，但各个线程对锁的控制，无疑加大了模块之间的耦合。下面，我们就用设计模式中的单例模式，来解决这个问题。<br>什么是单例模式？单例模式是指：保证一个类仅有一个实例，并提供一个访问它的全局访问点。具体到此例中，总线对象，就是一个单例，它仅有一个实例，各个线程对总线的访问只有一个全局访问点，即惟一的实例。</p>
+<a id="more"></a>
+
+<p>Python代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#encoding=utf8</span></span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment">#这里使用方法__new__来实现单例模式</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>(<span class="params"><span class="built_in">object</span></span>):</span><span class="comment">#抽象单例</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span>(<span class="params">cls, *args, **kw</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(cls, <span class="string">&#x27;_instance&#x27;</span>):</span><br><span class="line">            orig = <span class="built_in">super</span>(Singleton, cls)</span><br><span class="line">            cls._instance = orig.__new__(cls, *args, **kw)</span><br><span class="line">        <span class="keyword">return</span> cls._instance</span><br><span class="line"><span class="comment">#总线</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bus</span>(<span class="params">Singleton</span>):</span></span><br><span class="line">    lock = threading.RLock()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sendData</span>(<span class="params">self,data</span>):</span></span><br><span class="line">        self.lock.acquire()</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Sending Signal Data...&quot;</span>,data</span><br><span class="line">        self.lock.release()</span><br><span class="line"><span class="comment">#线程对象，为更加说明单例的含义，这里将Bus对象实例化写在了run里</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VisitEntity</span>(<span class="params">threading.Thread</span>):</span></span><br><span class="line">    my_bus=<span class="string">&quot;&quot;</span></span><br><span class="line">    name=<span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getName</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setName</span>(<span class="params">self, name</span>):</span></span><br><span class="line">        self.name=name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.my_bus=Bus()</span><br><span class="line">        self.my_bus.sendData(self.name)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;Entity %d begin to run...&quot;</span>%i</span><br><span class="line">        my_entity=VisitEntity()</span><br><span class="line">        my_entity.setName(<span class="string">&quot;Entity_&quot;</span>+<span class="built_in">str</span>(i))</span><br><span class="line">        my_entity.start()</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：<br>Entity 0 begin to run…<br>Entity 1 begin to run…<br>Entity 2 begin to run…<br>Sending Signal Data… Entity_0<br>Sending Signal Data… Entity_1<br>Sending Signal Data… Entity_2<br>在程序运行过程中，三个线程同时运行（运行结果的前三行先很快打印出来），而后分别占用总线资源（后三行每隔3秒打印一行）。虽然看上去总线Bus被实例化了三次，但实际上在内存里只有一个实例。</p>
+<h2 id="二、单例模式"><a href="#二、单例模式" class="headerlink" title="二、单例模式"></a>二、单例模式</h2><p>单例模式是所有设计模式中比较简单的一类，其定义如下：Ensure a class has only one instance, and  provide a global point of access to it.（保证某一个类只有一个实例，而且在全局只有一个访问点）<br><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/109c58907707f65b0c4084e8d756c6a1.png" alt="sgl.png"></p>
+<h2 id="三、单例模式的优点和应用"><a href="#三、单例模式的优点和应用" class="headerlink" title="三、单例模式的优点和应用"></a>三、单例模式的优点和应用</h2><p>单例模式的优点：<br>1、由于单例模式要求在全局内只有一个实例，因而可以节省比较多的内存空间；<br>2、全局只有一个接入点，可以更好地进行数据同步控制，避免多重占用；<br>3、单例可长驻内存，减少系统开销。<br>单例模式的应用举例：<br>1、生成全局惟一的序列号；<br>2、访问全局复用的惟一资源，如磁盘、总线等；<br>3、单个对象占用的资源过多，如数据库等；<br>4、系统全局统一管理，如Windows下的Task Manager；<br>5、网站计数器。</p>
+<h2 id="四、单例模式的缺点"><a href="#四、单例模式的缺点" class="headerlink" title="四、单例模式的缺点"></a>四、单例模式的缺点</h2><p>1、单例模式的扩展是比较困难的；<br>2、赋于了单例以太多的职责，某种程度上违反单一职责原则（六大原则后面会讲到）;<br>3、单例模式是并发协作软件模块中需要最先完成的，因而其不利于测试；<br>4、单例模式在某种情况下会导致“资源瓶颈”。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

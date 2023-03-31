@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【python】Python与设计模式--责任链模式
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-13
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h2 id="一、请假系统"><a href="#一、请假系统" class="headerlink" title="一、请假系统"></a>一、请假系统</h2><p>假设有这么一个请假系统：员工若想要请3天以内（包括3天的假），只需要直属经理批准就可以了；如果想请3-7天，不仅需要直属经理批准，部门经理需要最终批准；如果请假大于7天，不光要前两个经理批准，也需要总经理最终批准。类似的系统相信大家都遇到过，那么该如何实现呢？首先想到的当然是if…else…，但一旦遇到需求变动，其臃肿的代码和复杂的耦合缺点都显现出来。简单分析下需求，“假条”在三个经理间是单向传递关系，像一条链条一样，因而，我们可以用一条“链”把他们进行有序连接。<br>构造抽象经理类和各个层级的经理类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">manager</span>():</span></span><br><span class="line">    successor = <span class="literal">None</span></span><br><span class="line">    name = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name</span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setSuccessor</span>(<span class="params">self, successor</span>):</span></span><br><span class="line">        self.successor = successor</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handleRequest</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">lineManager</span>(<span class="params">manager</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handleRequest</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="keyword">if</span> request.requestType == <span class="string">&#x27;DaysOff&#x27;</span> <span class="keyword">and</span> request.number &lt;= <span class="number">3</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;%s:%s Num:%d Accepted OVER&#x27;</span> % (self.name, request.requestContent, request.number)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;%s:%s Num:%d Accepted CONTINUE&#x27;</span> % (self.name, request.requestContent, request.number)</span><br><span class="line">            <span class="keyword">if</span> self.successor != <span class="literal">None</span>:</span><br><span class="line">                self.successor.handleRequest(request)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">departmentManager</span>(<span class="params">manager</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handleRequest</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="keyword">if</span> request.requestType == <span class="string">&#x27;DaysOff&#x27;</span> <span class="keyword">and</span> request.number &lt;= <span class="number">7</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;%s:%s Num:%d Accepted OVER&#x27;</span> % (self.name, request.requestContent, request.number)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;%s:%s Num:%d Accepted CONTINUE&#x27;</span> % (self.name, request.requestContent, request.number)</span><br><span class="line">            <span class="keyword">if</span> self.successor != <span class="literal">None</span>:</span><br><span class="line">                self.successor.handleRequest(request)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">generalManager</span>(<span class="params">manager</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handleRequest</span>(<span class="params">self, request</span>):</span></span><br><span class="line">        <span class="keyword">if</span> request.requestType == <span class="string">&#x27;DaysOff&#x27;</span>:</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&#x27;%s:%s Num:%d Accepted OVER&#x27;</span> % (self.name, request.requestContent, request.number)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">request</span>():</span></span><br><span class="line">    requestType = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    requestContent = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    number = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>request类封装了假期请求。在具体的经理类中，可以通过setSuccessor接口来构建“责任链”，并在handleRequest接口中实现逻辑。场景类中实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>  __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    line_manager = lineManager(<span class="string">&#x27;LINE MANAGER&#x27;</span>)</span><br><span class="line">    department_manager = departmentManager(<span class="string">&#x27;DEPARTMENT MANAGER&#x27;</span>)</span><br><span class="line">    general_manager = generalManager(<span class="string">&#x27;GENERAL MANAGER&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    line_manager.setSuccessor(department_manager)</span><br><span class="line">    department_manager.setSuccessor(general_manager)</span><br><span class="line"></span><br><span class="line">    req = request()</span><br><span class="line">    req.requestType = <span class="string">&#x27;DaysOff&#x27;</span></span><br><span class="line">    req.requestContent = <span class="string">&#x27;Ask 1 day off&#x27;</span></span><br><span class="line">    req.number = <span class="number">1</span></span><br><span class="line">    line_manager.handleRequest(req)</span><br><span class="line"></span><br><span class="line">    req.requestType = <span class="string">&#x27;DaysOff&#x27;</span></span><br><span class="line">    req.requestContent = <span class="string">&#x27;Ask 5 days off&#x27;</span></span><br><span class="line">    req.number = <span class="number">5</span></span><br><span class="line">    line_manager.handleRequest(req)</span><br><span class="line"></span><br><span class="line">    req.requestType = <span class="string">&#x27;DaysOff&#x27;</span></span><br><span class="line">    req.requestContent = <span class="string">&#x27;Ask 10 days off&#x27;</span></span><br><span class="line">    req.number = <span class="number">10</span></span><br><span class="line">    line_manager.handleRequest(req)</span><br></pre></td></tr></table></figure>
+
+<p>打印如下：<br>LINE MANAGER:Ask 1 day off Num:1 Accepted OVER<br>LINE MANAGER:Ask 5 days off Num:5 Accepted CONTINUE<br>DEPARTMENT MANAGER:Ask 5 days off Num:5 Accepted OVER<br>LINE MANAGER:Ask 10 days off Num:10 Accepted CONTINUE<br>DEPARTMENT MANAGER:Ask 10 days off Num:10 Accepted CONTINUE<br>GENERAL MANAGER:Ask 10 days off Num:10 Accepted OVER</p>
+<h2 id="二、责任链模式"><a href="#二、责任链模式" class="headerlink" title="二、责任链模式"></a>二、责任链模式</h2><p>责任链模式的定义如下：使多个对象都有机会处理请求，从而避免了请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有对象处理它为止。<br><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9a6f1bbcccd2eca8c104f75014a31fa0.png" alt="f1.png"><br>需要说明的是，责任链模式中的应该只有一个处理者，也就是说，本例中的“最终批准”为该对象所谓的“请求处理”。</p>
+<h2 id="三、责任链模式的优点和应用场景"><a href="#三、责任链模式的优点和应用场景" class="headerlink" title="三、责任链模式的优点和应用场景"></a>三、责任链模式的优点和应用场景</h2><p>优点：<br>1、将请求者与处理者分离，请求者并不知道请求是被哪个处理者所处理，易于扩展。<br>应用场景：<br>1、若一个请求可能由一个对请求有链式优先级的处理群所处理时，可以考虑责任链模式。除本例外，银行的客户请求处理系统也可以用责任链模式实现（VIP客户和普通用户处理方式当然会有不同）。</p>
+<h2 id="四、责任链模式的缺点"><a href="#四、责任链模式的缺点" class="headerlink" title="四、责任链模式的缺点"></a>四、责任链模式的缺点</h2><p>1、如果责任链比较长，会有比较大的性能问题；<br>2、如果责任链比较长，若业务出现问题，比较难定位是哪个处理者的问题。</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>

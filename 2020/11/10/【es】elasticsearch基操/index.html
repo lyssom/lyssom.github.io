@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        【es】elasticsearch基操
+    </h2>
+    <ul class="post-date">
+        <li>
+            2020-11-10
+        </li>
+        <li>
+            liuyu
+        </li>
+    </ul>
+    <div class="post-content">
+        <h1 id="ES-使用"><a href="#ES-使用" class="headerlink" title="ES 使用"></a>ES 使用</h1><h2 id="0-环境"><a href="#0-环境" class="headerlink" title="0. 环境"></a>0. 环境</h2><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/7.9/rpm.html#rpm-repo">https://www.elastic.co/guide/en/elasticsearch/reference/7.9/rpm.html#rpm-repo</a></p>
+<p>配yum源，再yum</p>
+<p>systemctl start elasticsearch(启动)</p>
+<p>pip install elasticsearch</p>
+<a id="more"></a>
+
+<h2 id="1-基础"><a href="#1-基础" class="headerlink" title="1. 基础"></a>1. 基础</h2><h5 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h5><ol>
+<li><p>创建索引</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = es.indices.create(index=<span class="string">&#x27;index_name&#x27;</span>, ignore=<span class="number">400</span>, body=_index_mappings)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写一个</span></span><br><span class="line">result = es.create(index=<span class="string">&#x27;index_name&#x27;</span>, doc_type=<span class="string">&#x27;faq&#x27;</span>, <span class="built_in">id</span>=<span class="built_in">id</span>, body=action)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量写</span></span><br><span class="line">helpers.bulk(es, action)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>删除</p>
+<p>es.delete(index=’index_name’, doc_type=’type_name’, id=1)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">es.delete(index=<span class="string">&#x27;index_name&#x27;</span>, doc_type=<span class="string">&#x27;type_name&#x27;</span>, <span class="built_in">id</span>=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>查</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># query 查：</span></span><br><span class="line">result = es.search(index=<span class="string">&#x27;dnsflows&#x27;</span>, track_total_hits=<span class="literal">True</span>,</span><br><span class="line">                   body=&#123;<span class="string">&quot;query&quot;</span>: &#123;<span class="string">&quot;term&quot;</span>: &#123;<span class="string">&quot;src_ip&quot;</span>: <span class="string">&quot;114.114.114.114&quot;</span>&#125;&#125;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># filter 查：</span></span><br><span class="line">&#123;<span class="string">&#x27;query&#x27;</span>: &#123;<span class="string">&#x27;bool&#x27;</span>: &#123;<span class="string">&#x27;filter&#x27;</span>: [&#123;<span class="string">&#x27;match&#x27;</span>: &#123;<span class="string">&#x27;length&#x27;</span>: <span class="string">&#x27;44&#x27;</span>&#125;&#125;, &#123;<span class="string">&#x27;match&#x27;</span>: &#123;<span class="string">&#x27;src_ip&#x27;</span>: <span class="string">&#x27;192.168.24.29&#x27;</span>&#125;&#125;]&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<p>复杂的查询用json装不美观，使用elasticsearch-dsl，相当于orm。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = Search(using=es, index=<span class="string">&quot;dnsflows&quot;</span>).<span class="built_in">filter</span>(<span class="string">&quot;match&quot;</span>, length=<span class="string">&#x27;44&#x27;</span>)</span><br><span class="line"><span class="comment"># 转成json</span></span><br><span class="line">s.to_dict()</span><br><span class="line"><span class="comment"># 计数</span></span><br><span class="line">s.count()</span><br><span class="line"><span class="comment"># 执行</span></span><br><span class="line">s.execute()</span><br></pre></td></tr></table></figure>
+
+<p>增删改查好文：</p>
+<p>  <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/462007422e65">https://www.jianshu.com/p/462007422e65</a></p>
+<h5 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h5><p>  <a target="_blank" rel="noopener" href="https://www.cnblogs.com/betterwgo/p/11571275.html">https://www.cnblogs.com/betterwgo/p/11571275.html</a></p>
+<h2 id="2-结构化查询"><a href="#2-结构化查询" class="headerlink" title="2. 结构化查询"></a>2. 结构化查询</h2><p>![](./es/屏幕截图 2020-11-04 152001.png)</p>
+<p>![](./es/屏幕截图 2020-11-04 152045.png)</p>
+<h2 id="3-lucene语法"><a href="#3-lucene语法" class="headerlink" title="3. lucene语法"></a>3. lucene语法</h2><h3 id="3-1-lucene语法"><a href="#3-1-lucene语法" class="headerlink" title="3.1 lucene语法"></a>3.1 lucene语法</h3><ol>
+<li><p>全文搜索</p>
+<p>在搜索栏输入114.246.225.218，会返回所有字段值中包含114.246.225.218的文档</p>
+</li>
+</ol>
+<p>![](./es/屏幕截图 2020-11-03 113704.png)</p>
+<p> 使用双引号包起来作为一个短语搜索 <code>&quot;Linux x86_64&quot;</code></p>
+<ol start="2">
+<li><p>字段</p>
+<p>也可以按页面左侧显示的字段搜索</p>
+<p>限定字段全文搜索：<code>field:value</code></p>
+<p>精确搜索：关键字加上双引号 <code>filed:&quot;value&quot;</code><br>搜索http状态码为404的文档: <code>http.code:404</code></p>
+<p>字段本身是否存在<br><code>_exists_:http</code>：返回结果中需要有http字段<br><code>_missing_:http</code>：不能含有http字段</p>
+</li>
+<li><p>通配符</p>
+<p><code>?</code> 匹配单个字符<br><code>*</code> 匹配0到多个字符</p>
+<p><code>kiba?a</code>, <code>el*search</code></p>
+</li>
+</ol>
+<blockquote>
+<p>?<code> </code>*<code> 不能用作第一个字符，例如：</code>?text<code> </code>*text</p>
+</blockquote>
+<ol start="4">
+<li><p>正则</p>
+<p>es支持部分<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html#regexp-syntax">正则</a>功能 <code>mesg:/mes&#123;2&#125;ages?/</code></p>
+</li>
+<li><p>模糊搜索</p>
+<p><code>~</code>:在一个单词后面加上<code>~</code>启用模糊搜索</p>
+<p><code>first~</code> 也能匹配到 frist</p>
+<p>还可以指定需要多少相似度</p>
+<p><code>cromm~0.3</code> 会匹配到 from 和 chrome</p>
+<p>数值范围0.0 ~ 1.0，默认0.5，越大越接近搜索的原始值</p>
+</li>
+<li><p>近似搜索</p>
+<p>在短语后面加上<code>~</code> <code>&quot;select where&quot;~3</code> 表示 select 和 where 中间隔着3个单词以内</p>
+</li>
+<li><p>范围搜索</p>
+<p>数值和时间类型的字段可以对某一范围进行查询</p>
+<p><code>length:[100 TO 200]</code></p>
+<p>``date:{“now-6h” TO “now”}`</p>
+<p>[ ] 表示端点数值包含在范围内，{ } 表示端点数值不包含在范围内</p>
+</li>
+<li><p>逻辑操作</p>
+<p><code>AND</code><br><code>OR</code></p>
+<p><code>+</code>：搜索结果中必须包含此项<br><code>-</code>：不能含有此项<br><code>+apache -jakarta test</code>：结果中必须存在apache，不能有jakarta，test可有可无</p>
+</li>
+<li><p>分组</p>
+<p><code>(jakarta OR apache) AND jakarta</code></p>
+</li>
+<li><p>字段分组</p>
+<p><code>title:(+return +&quot;pink panther&quot;)</code></p>
+</li>
+<li><p>转义特殊字符</p>
+<p><code>+ - &amp;&amp; || ! () &#123;&#125; [] ^&quot; ~ * ? : \</code></p>
+<p>以上字符当作值搜索的时候需要用<code>\</code>转义</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chenqionghe/p/12501218.html">https://www.cnblogs.com/chenqionghe/p/12501218.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">https://lucene.apache.org/core/2_9_4/queryparsersyntax.html</a></p>
+<h3 id="3-2-kibana实现"><a href="#3-2-kibana实现" class="headerlink" title="3.2 kibana实现"></a>3.2 kibana实现</h3><p>对比天眼和kibana界面和文档可以看到，天眼日志检索界面基本为对kibana Discover界面的汉化。</p>
+<p>![](./es/屏幕截图 2020-11-03 113704.png)</p>
+<p>对kibana分析如下：</p>
+<p>通过在搜索栏输入搜索条件，您可以在匹配当前索引模式的索引中进行搜索。您可以进行简单的文本查询，或使用 Lucene 语法，或使用基于 JSON 的 Elasticsearch 查询 DSL 。</p>
+<h4 id="Kibana-Query-Language"><a href="#Kibana-Query-Language" class="headerlink" title="Kibana Query Language"></a>Kibana Query Language</h4><p>The Kibana Query Language (KQL) makes it easy to find the fields and syntax for your Elasticsearch query. If you have the <a target="_blank" rel="noopener" href="https://www.elastic.co/subscriptions">Basic tier</a> or above, simply place your cursor in the <strong>Search</strong> field. As you type, you’ll get suggestions for fields, values, and operators.</p>
+<p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/kibana/7.9/kuery-query.html">https://www.elastic.co/guide/en/kibana/7.9/kuery-query.html</a></p>
+<ol>
+<li>全文查询时，采用es的multi_match方法进行查询</li>
+</ol>
+<p>![](./es/屏幕截图 2020-11-03 141450.png)</p>
+<p>![](./es/屏幕截图 2020-11-03 141353.png)</p>
+<ol start="2">
+<li><p>字段查询时，采用es的minimum_should_match的match方法进行查询</p>
+<p>![](./es/屏幕截图 2020-11-03 141916.png)</p>
+</li>
+<li><p>通配符查询时，采用query_string方法进行查询：</p>
+<p>![](./es/屏幕截图 2020-11-03 142255.png)</p>
+</li>
+<li><p>正则，采用query_string方法进行查询：</p>
+</li>
+<li><p><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, and <code>&lt;=</code>:</p>
+</li>
+</ol>
+<p>![](./es/屏幕截图 2020-11-03 145451.png)</p>
+<ol start="6">
+<li><p>逻辑操作</p>
+<p>​    解析为两个字段进行查询</p>
+</li>
+</ol>
+<p>![](./es/屏幕截图 2020-11-03 145712.png)</p>
+<p>and 用 must装，or 用should装。和es语法一样</p>
+<p>实现： </p>
+<ol>
+<li><p>pyparsing中的lucene_grammar</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/pyparsing/pyparsing/blob/master/examples/lucene_grammar.py">https://github.com/pyparsing/pyparsing/blob/master/examples/lucene_grammar.py</a></p>
+</li>
+<li><p>前端复用kibana</p>
+<p>从现象上看，查询转json是前端在做。可以调研kibana前端做了哪些事情，代码是否可复用。</p>
+</li>
+<li><p>使用python将lucene_dsl转为es_dsl</p>
+</li>
+</ol>
+<h3 id="3-2-sql-转-es"><a href="#3-2-sql-转-es" class="headerlink" title="3.2 sql 转 es"></a>3.2 sql 转 es</h3><p>有一些工具和现有的nlp库，考虑是否将现有语法沿用。</p>
+<p><a target="_blank" rel="noopener" href="http://www.ischoolbar.com/EsParser/">http://www.ischoolbar.com/EsParser/</a></p>
+<p><a target="_blank" rel="noopener" href="https://elasticsearch.cn/article/114">https://elasticsearch.cn/article/114</a></p>
+<h2 id="4-二次查询"><a href="#4-二次查询" class="headerlink" title="4. 二次查询"></a>4. 二次查询</h2><p>4.1 kibana中的现象</p>
+<p>![](./es/屏幕截图 2020-11-04 113006.png)</p>
+<p>点击filter for value ，前端调用了正常的查询接口，只是把新增条件也加进去一起查。并未采用特殊接口进行处理。</p>
+<p>![](./es/屏幕截图 2020-11-04 112920.png)</p>
+<p>猜测，很有可能是es层面做了缓存，不需要服务层再进行处理。</p>
+<p>4.2 es中的原理</p>
+<h5 id="什么是Query-Cache"><a href="#什么是Query-Cache" class="headerlink" title="什么是Query Cache"></a>什么是Query Cache</h5><p>缓存查询结果。</p>
+<p><img src="./es/6181457-60e02e1e99fee7f6.png"></p>
+<p>缓存机制、清除等一系列的问题不需要考虑了，es已经做好了。</p>
+<p>缓存机制：</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b479282917b2?utm_source=oschina-app">https://www.jianshu.com/p/b479282917b2?utm_source=oschina-app</a></p>
+<p>filter DSL进行缓存，query DSL 不缓存。</p>
+<p>filter和query的区别：</p>
+<p>filter无相关性评分。但是性能好，有缓存。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qdhxhz/p/11493677.html">https://www.cnblogs.com/qdhxhz/p/11493677.html</a></p>
+<p>filter DSL的缓存说明</p>
+<p>![](./es/屏幕截图 2020-11-04 143039.png)</p>
+<p>4.3 结论</p>
+<ol>
+<li><p>filter 缓存，尽可能用filter查。</p>
+</li>
+<li><p>原则上来说，使用查询语句做全文本搜索或其他需要进行相关性评分的时候，剩下的全部用过滤语句 </p>
+</li>
+</ol>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+    <h1>Categories</h1>
+
+    
+
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IoT/" rel="tag">IoT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TVM/" rel="tag">TVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bert/" rel="tag">bert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clickhouse/" rel="tag">clickhouse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iotdb/" rel="tag">iotdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/" rel="tag">大数据计算</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
