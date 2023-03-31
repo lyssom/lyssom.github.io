@@ -130,11 +130,11 @@
             2023-03-31
         </li>
         <li>
-            John Doe
+            lyssom
         </li>
     </ul>
     <div class="post-content">
-        <p>SSTable (Sorted String Table) 是排序字符串表的简称，来源于大名鼎鼎的 Google Bigtable 论文[1]。它用于 Bigtable 内部数据文件的存储，它是一个种高效的 key-value 型文件存储格式。</p>
+        <h1 id="从SSTable到LSM-Tree"><a href="#从SSTable到LSM-Tree" class="headerlink" title="从SSTable到LSM-Tree"></a>从SSTable到LSM-Tree</h1><p>SSTable (Sorted String Table) 是排序字符串表的简称，来源于大名鼎鼎的 Google Bigtable 论文[1]。它用于 Bigtable 内部数据文件的存储，它是一个种高效的 key-value 型文件存储格式。</p>
 <p>以下引用论文中对 SSTable 的描述：</p>
 <pre><code>The Google SSTable file format is used internally to store Bigtable data. An SSTable provides a persistent, ordered immutable map from keys to values, where both keys and values are arbitrary byte strings. Operations are provided to look up the value associated with a specified key, and to iterate over all key/value pairs in a specified key range. Internally, each SSTable contains a sequence of blocks (typically each block is 64KB in size, but this is configurable). A block index (stored at the end of the SSTable) is used to locate blocks; the index is loaded into memory when the SSTable is opened. A lookup can be performed with a single disk seek: we first find the appropriate block by performing a binary search in the in-memory index, and then reading the appropriate block from disk. Optionally, an SSTable can be completely mapped into memory, which allows us to perform lookups and scans without touching disk[1]. 
 </code></pre>
@@ -155,7 +155,16 @@
 <p>同时执行压缩和合并多个段[9]：</p>
 <p>在执行压缩和合并过程中，旧的段并不会被修改，依然可以继续处理读写请求。合并完成之后，就可以安全地删除旧的段文件。</p>
 <p>至于压缩算法，往往采用可配的方式支持。Google 论文[1]中提到可以采用”两遍”方式：第一个遍采用 Bentley and McIlroy’s 方式，这种方式在一个很大的扫描窗口里对常见的长字 符串进行压缩；第二遍采用快速压缩算法，即在一个16KB的小扫描窗口中寻找重复数据。<br>为什么 SSTable 是不可变的？</p>
-<p>不可变的段文件，对于并发控制和奔溃恢复非常友好。<br>参考<br>Bigtable: A Distributed Storage System for Structured Data <a target="_blank" rel="noopener" href="https://research.google/pubs/pub27898/^Modern">https://research.google/pubs/pub27898/^Modern</a> B-Tree Techniques <a target="_blank" rel="noopener" href="https://www.amazon.com/Modern-B-Tree-Techniques-Foundations-Databases/dp/1601984820^A">https://www.amazon.com/Modern-B-Tree-Techniques-Foundations-Databases/dp/1601984820^A</a> Tutorial of RocksDB SST formats <a target="_blank" rel="noopener" href="https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats^LevelDB%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90%E4%B9%8BSSTable">https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats^LevelDB源码剖析之SSTable</a> <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ed0b94e8a2c^Scylla">https://www.jianshu.com/p/1ed0b94e8a2c^Scylla</a> SSTable Format <a target="_blank" rel="noopener" href="https://docs.scylladb.com/architecture/sstable/^Database">https://docs.scylladb.com/architecture/sstable/^Database</a> storage engines under the hood <a target="_blank" rel="noopener" href="https://medium.com/@shashankbaravani/database-storage-engines-under-the-hood-705418dc0e35^SSTables">https://medium.com/@shashankbaravani/database-storage-engines-under-the-hood-705418dc0e35^SSTables</a> <a target="_blank" rel="noopener" href="http://cassandra.apache.org/doc/latest/architecture/storage_engine.html#sstables^leveldb%E4%B8%AD%E7%9A%84SSTable">http://cassandra.apache.org/doc/latest/architecture/storage_engine.html#sstables^leveldb中的SSTable</a> <a target="_blank" rel="noopener" href="https://bean-li.github.io/leveldb-sstable/^abChatper">https://bean-li.github.io/leveldb-sstable/^abChatper</a> 3. Storage and Retrieval <a target="_blank" rel="noopener" href="https://notes.shichao.io/dda/ch3/">https://notes.shichao.io/dda/ch3/</a></p>
+<p>不可变的段文件，对于并发控制和奔溃恢复非常友好。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Bigtable: A Distributed Storage System for Structured Data <a target="_blank" rel="noopener" href="https://research.google/pubs/pub27898/">https://research.google/pubs/pub27898/</a></p>
+<p>Modern B-Tree Techniques <a target="_blank" rel="noopener" href="https://www.amazon.com/Modern-B-Tree-Techniques-Foundations-Databases/dp/1601984820">https://www.amazon.com/Modern-B-Tree-Techniques-Foundations-Databases/dp/1601984820</a></p>
+<p>A Tutorial of RocksDB SST formats <a target="_blank" rel="noopener" href="https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats">https://github.com/facebook/rocksdb/wiki/A-Tutorial-of-RocksDB-SST-formats</a></p>
+<p>LevelDB源码剖析之SSTable <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1ed0b94e8a2c">https://www.jianshu.com/p/1ed0b94e8a2c</a></p>
+<p>Scylla SSTable Format <a target="_blank" rel="noopener" href="https://docs.scylladb.com/architecture/sstable/">https://docs.scylladb.com/architecture/sstable/</a></p>
+<p>Database storage engines under the hood <a target="_blank" rel="noopener" href="https://medium.com/@shashankbaravani/database-storage-engines-under-the-hood-705418dc0e35">https://medium.com/@shashankbaravani/database-storage-engines-under-the-hood-705418dc0e35</a></p>
+<p>SSTables <a target="_blank" rel="noopener" href="http://cassandra.apache.org/doc/latest/architecture/storage_engine.html#sstables">http://cassandra.apache.org/doc/latest/architecture/storage_engine.html#sstables</a></p>
+<p>leveldb中的SSTable <a target="_blank" rel="noopener" href="https://bean-li.github.io/leveldb-sstable/">https://bean-li.github.io/leveldb-sstable/</a></p>
+<p>Chatper 3. Storage and Retrieval <a target="_blank" rel="noopener" href="https://notes.shichao.io/dda/ch3/">https://notes.shichao.io/dda/ch3/</a></p>
 
     </div>
 </article>
