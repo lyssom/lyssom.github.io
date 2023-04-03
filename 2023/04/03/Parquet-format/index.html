@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="http://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        Parquet-format
+    </h2>
+    <ul class="post-date">
+        <li>
+            2023-04-03
+        </li>
+        <li>
+            lyssom
+        </li>
+    </ul>
+    <div class="post-content">
+        <p>大规模分析型数据处理在互联网乃至其他行业公司中都已经应用的越来越广泛，尤其是当前已经可以用廉价的存储来收集和保存海量的业务数据情况下。如何让分析师和工程师便捷的利用这些数据也变得越来越重要。列式存储（Column-oriented  Storage）是大数据场景面向分析型数据的主流存储方式。与行式存储相比，列存由于可以只提取部分数据列、同列同质数据拥有更好的编码及压缩方式，因此在 OLAP 场景下能提供更好的 IO 性能。</p>
+<p>Apache Parquet 是由 Twitter 和 Cloudera 最先发起并合作开发的列存项目，也是 2010 年 Google  发表的 Dremel 论文中描述的内部列存格式的开源实现。和一些传统的列式存储（C-Store、MonetDB  等）系统相比，Dremel&#x2F;Parquet 最大的贡献是支持嵌套格式数据（Nested  Data）的列式存储。嵌套格式可以很自然的描述互联网和科学计算等领域的数据，Dremel&#x2F;Parquet  “原生”的支持嵌套格式数据减少了规则化、重新组合这些大规模数据的代价。</p>
+<p>Parquet 的设计与计算框架、数据模型以及编程语言无关，可以与任意项目集成，因此应用广泛。目前已经是 Hadoop 大数据生态圈列式存储的事实标准。</p>
+<p><strong>原理</strong></p>
+<p>行存 VS 列存</p>
+<p>比如下图是拥有 A&#x2F;B&#x2F;C 3 个字段的简单示意表： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-1.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-1.png" alt="img"></a></p>
+<p>在面向行的存储中，每列的数据依次排成一行，如下所示： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-2.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-2.png" alt="img"></a></p>
+<p>而在面向列的存储中，相同列的数据存储在一起： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-3.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-3.png" alt="img"></a></p>
+<p>显而易见，行存适用于数据整行读取场景，而列存适用于只读取部分列数据（统计分析等）场景。</p>
+<p><strong>数据模型</strong></p>
+<p>schema 协议</p>
+<p>想要深入的了解 Parquet 存储格式首先需要理解它的数据模型。Parquet 采用了一个类似 Google Protobuf 的协议来描述存储数据的 schema。如下是 Parquet 数据 schema 的一个简单示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">message AddressBook &#123;</span><br><span class="line">  required string owner;</span><br><span class="line">  repeated string ownerPhoneNumbers;</span><br><span class="line">  repeated group contacts &#123;</span><br><span class="line">    required string name;</span><br><span class="line">    optional string phoneNumber;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>schema 的最上层是 message，里面可以包含一系列字段。每个字段都拥有 3  个属性：重复性（repetition）、类型（type）以及名称（name）。字段类型可以是一个 group 或者原子类型（如  int、boolean、string 等），group 可以用来表示数据的嵌套结构。字段的重复性有三种情况：</p>
+<ul>
+<li>required：有且只有一次</li>
+<li>optional：0 或 1 次</li>
+<li>repeated：0 或多次</li>
+</ul>
+<p>这个模型非常的简洁。一些复杂的数据类型如：Map、List 和 Set 也可以用重复的字段（repeated fields） + groups 来表达，因此也就不用再单独定义这些类型。</p>
+<p>采用 repeated field 表达 List 或者 Set 的示例： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-4.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-4.png" alt="图 4"></a>图 4</p>
+<p>采用 repeated group（包含 key 和 value，其中 key 是 required） 来表达 Map 的示例： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-5.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-5.png" alt="图 5"></a>图 5</p>
+<p>列式存储格式</p>
+<p>试想一下，为了使数据能够按列存储，对于一条记录（Record），首先要将其按列（Column）进行拆分。对于扁平（Flat）结构数据，拆分比较直观，一个字段即对应一列，而嵌套格式数据会复杂些。Dremel&#x2F;Parquet 中，提出以树状层级的形式组织 schema  中的字段（Field），树的叶子结点对应一个原子类型字段，这样这个模型能同时覆盖扁平结构和嵌套结构数据（扁平结构只是嵌套结构的一种特例）。嵌套字段的完整路径使用简单的点分符号表示，如，contacts. name。</p>
+<p>AddressBook 例子以树状结构展示的样式: <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-6.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-6.png" alt="图 6"></a>图 6</p>
+<p>列存连续的存储一个字段的值，以便进行高效的编码压缩及快速的读取。Dremel 中行存 vs 列存的图示： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-7.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-7.png" alt="图 7"></a>图 7</p>
+<p>Repetition and Deﬁnition Levels</p>
+<p>对于嵌套格式列存，除了按列拆分进行连续的存储，还需要能够“无损”的保留嵌套格式的结构化信息，以便正确的重建记录。</p>
+<p>只有字段值不能表达清楚记录的结构。给定一个重复字段的两个值，我们不知道此值是在什么“级别”被重复的（比如，这些值是来自两个不同的记录，还是相同的记录中两个重复的值）。同样的，给出一个缺失的可选字段，我们不知道整个路径有多少字段被显示定义了。</p>
+<p>Dremel 提出了 Repetition Level（重复级别）和 Definition Level（定义级别）两个概念，用以解决这个问题。并实现了记录中任意一个字段的恢复都不需要依赖其它字段，且可以对任意字段子集按原始嵌套格式进行重建。 <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-8.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-8.png" alt="图 8"></a>图 8</p>
+<p><strong>Repetition levels：</strong>用以表示在该字段路径上哪个节点进行了重复（at what repeated ﬁeld in the ﬁeld’s path the value has repeated）。</p>
+<p>一个重复字段存储的列值，有可能来自不同记录，也可能由同一记录的不同层级节点重复导致。比如图 8 中的 Code 字段，他在 r1  记录中出现了 3 次，分别是字段 Name 和 Language 重复导致的，其中 Language 先重复了 2 次，Name 字段再重复了 1 次。</p>
+<p>Repetition Levels 采用数字代表重复节点的层级。根据树形层次结构，根结点为 0、下一层级为 1…  依次类推。根结点的重复暗含了记录的重复，也即 r&#x3D;0 代表新记录的开始。required 和 optional 字段不需要 repetition level，只有可重复的字段需要。因此，上述 Code 字段的 repetition levels 范围为 0-2。当我们从上往下扫描 r1  记录，首先遇到 Code 的值是“en-us”，由于它之前没有该字段路径相关的字段出现，因此 r&#x3D;0；其次遇到“en”，是 Language  层级重复导致的，r&#x3D;2；最后遇到“en-gb”，是 Name 层级重复导致的，因此 r&#x3D;1。所以，Code 字段的 repetition  levels 在 r1 记录中是“0,2,1”。</p>
+<p>需要注意的是，r1 记录中的第二个重复 Name，由于其不包含 Code 字段，为了区分“en-gb”值是来自记录中的第三个 Name  而不是第二个，我们需要在“en”和“en-gb”之间插入一个值“null”。由于它是 Name 级重复的，因此它的  r&#x3D;1。另外还需要注意一些隐含信息，比如 Code 是 required 字段类型，因此一旦 Code 出现未定义，则隐含表明其上级  Language 也肯定未定义。</p>
+<p><strong>Definition Levels：</strong>用以表示该字段路径上有多少可选的字段实际进行了定义（how many ﬁelds in p that could be undeﬁned (because they are optional or  repeated) are actually present）。</p>
+<p>光有 Repetition Levels 尚无法完全保留嵌套结构信息，考虑上述图 8 中 r1 记录的 Backward 字段。由于 r1 中未定义 Backward 字段，因此我们插入一个“null”并设置 r&#x3D;0。但 Backward 的上级 Links 字段在 r1  中显式的进行了定义，null 和 r&#x3D;0 无法再表达出这一层信息。因此需要额外再添加 Definition Levels  定义记录可选字段出现的个数，Backward 的路径上出现 1 个可选字段 Links，因此它的 d&#x3D;1。</p>
+<p>有了 Definition Levels 我们就可以清楚的知道该值出现在字段路径的第几层，对未定义字段的 null 和字段实际的值为  null 也能进行区分。只有 optional 和 repeated 字段需要 Definition Levels 定义，因为 required 字段已经隐含了字段肯定被定义（这可以减少 Definition Levels  需要描述的数字，并在一定程度上节省后续的存储空间）。另外一些其他的隐含信息：如果 Definition Levels 小于路径中  optional + repeated 字段的数量，则该字段的值肯定为 null；Definition Levels 的值为 0 隐含了  Repeated Levels 也为 0（路径中没有 optional&#x2F;repeated 字段或整个路径未定义）。</p>
+<p>striping and assembly 算法</p>
+<p>现在把 Repetition Levels 和 Definition Levels 两个概念一起考虑。还是沿用上述 AddressBook 例子。下表显示了 AddressBook 中每个字段的最大重复和定义级别，并解释了为什么它们小于列的深度： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-9.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-9.png" alt="图 9"></a>图 9</p>
+<p>假设这是两条真实的 AddressBook 数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">AddressBook &#123;</span><br><span class="line">  owner: &quot;Julien Le Dem&quot;,</span><br><span class="line">  ownerPhoneNumbers: &quot;555 123 4567&quot;,</span><br><span class="line">  ownerPhoneNumbers: &quot;555 666 1337&quot;,</span><br><span class="line">  contacts: &#123;</span><br><span class="line">    name: &quot;Dmitriy Ryaboy&quot;,</span><br><span class="line">    phoneNumber: &quot;555 987 6543&quot;,</span><br><span class="line">  &#125;,</span><br><span class="line">  contacts: &#123;</span><br><span class="line">    name: &quot;Chris Aniszczyk&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">AddressBook &#123;</span><br><span class="line">  owner: &quot;A. Nonymous&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们采用 contacts.phoneNumber 字段来演示一下拆解和重组记录的 striping and assembly 算法。</p>
+<p>仅针对 contacts.phoneNumber 字段投影后，数据具有如下结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">AddressBook &#123;</span><br><span class="line">  contacts: &#123;</span><br><span class="line">    phoneNumber: &quot;555 987 6543&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  contacts: &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">AddressBook &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>计算可得该该字段对应的数据如下（R &#x3D;重复级别，D &#x3D;定义级别）： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-10.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-10.png" alt="图 10"></a>图 10</p>
+<p>因此我们最终存储的记录数据如下：</p>
+<ul>
+<li>contacts.phoneNumber: “555 987 6543”    <ul>
+<li>new record: R &#x3D; 0</li>
+<li>value is defined: D &#x3D; maximum (2)</li>
+</ul>
+</li>
+<li>contacts.phoneNumber: null    <ul>
+<li>repeated contacts: R &#x3D; 1</li>
+<li>only defined up to contacts: D &#x3D; 1</li>
+</ul>
+</li>
+<li>contacts: null    <ul>
+<li>new record: R &#x3D; 0</li>
+<li>only defined up to AddressBook: D &#x3D; 0</li>
+</ul>
+</li>
+</ul>
+<p>使用图表展示（注意其中的 null 值并不会实际存储，原因如上所说只要 Definition Levels 小于其 max 值即隐含该字段值为 null）： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-11.png"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-11.png" alt="图 11"></a>图 11</p>
+<p>在重组该记录时，我们重复读取该字段的值：</p>
+<ul>
+<li>R&#x3D;0, D&#x3D;2, Value &#x3D; “555 987 6543”:    <ul>
+<li>R &#x3D; 0 means a new record. We recreate the nested records from the root until the definition level (here 2)</li>
+<li>D &#x3D; 2 which is the maximum. The value is defined and is inserted.</li>
+</ul>
+</li>
+<li>R&#x3D;1, D&#x3D;1:    <ul>
+<li>R &#x3D; 1 means a new entry in the contacts list at level 1.</li>
+<li>D &#x3D; 1 means contacts is defined but not phoneNumber, so we just create an empty contacts.</li>
+</ul>
+</li>
+<li>R&#x3D;0, D&#x3D;0:    <ul>
+<li>R &#x3D; 0 means a new record. we create the nested records from the root until the definition level</li>
+<li>D &#x3D; 0 &#x3D;&gt; contacts is actually null, so we only have an empty AddressBook</li>
+</ul>
+</li>
+</ul>
+<p><strong>实现</strong></p>
+<p>Parquet 工程具体的实现。</p>
+<p>Parquet 文件存储格式中的术语</p>
+<ul>
+<li>Block (hdfs block)：即指 HDFS Block，Parquet 的设计与 HDFS 完全兼容。Block 是  HDFS 文件存储的基本单位，HDFS 会维护一个 Block 的多个副本。在 Hadoop 1.x 版本中 Block 默认大小  64M，Hadoop 2.x 版本中默认大小为 128M。</li>
+<li>File：HDFS 文件，保存了该文件的元数据信息，但可以不包含实际数据（由 Block 保存）。</li>
+<li>Row group：按照行将数据划分为多个逻辑水平分区。一个 Row group（行组）由每个列的一个列块（Column Chunk）组成。</li>
+<li>Column chunk：一个列的列块，分布在行组当中，并在文件中保证是连续的。</li>
+<li>Page：一个列块切分成多个 Pages（页面），概念上讲，页面是 Parquet 中最小的基础单元（就压缩和编码方面而言）。一个列块中可以有多个类型的页面。</li>
+</ul>
+<p>并行化执行的基本单元</p>
+<ul>
+<li>MapReduce - File&#x2F;Row Group（一个任务对应一个文件或一个行组）</li>
+<li>IO - Column chunk（任务中的 IO 以列块为单位进行读取）</li>
+<li>Encoding&#x2F;Compression - Page（编码格式和压缩一次以一个页面为单位进行）</li>
+</ul>
+<p>Parquet 文件格式</p>
+<p>Parquet 文件格式是自解析的，采用 thrift 格式定义的文件 schema 以及其他元数据信息一起存储在文件的末尾。</p>
+<p>文件存储格式示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">4-byte magic number &quot;PAR1&quot;</span><br><span class="line">&lt;Column 1 Chunk 1 + Column Metadata&gt;</span><br><span class="line">&lt;Column 2 Chunk 1 + Column Metadata&gt;</span><br><span class="line">...</span><br><span class="line">&lt;Column N Chunk 1 + Column Metadata&gt;</span><br><span class="line">&lt;Column 1 Chunk 2 + Column Metadata&gt;</span><br><span class="line">&lt;Column 2 Chunk 2 + Column Metadata&gt;</span><br><span class="line">...</span><br><span class="line">&lt;Column N Chunk 2 + Column Metadata&gt;</span><br><span class="line">...</span><br><span class="line">&lt;Column 1 Chunk M + Column Metadata&gt;</span><br><span class="line">&lt;Column 2 Chunk M + Column Metadata&gt;</span><br><span class="line">...</span><br><span class="line">&lt;Column N Chunk M + Column Metadata&gt;</span><br><span class="line">File Metadata</span><br><span class="line">4-byte length in bytes of file metadata</span><br><span class="line">4-byte magic number &quot;PAR1&quot;</span><br></pre></td></tr></table></figure>
+
+<p>整个文件（表）有 N 个列，划分成了 M 个行组，每个行组都有所有列的一个 Chunk  和其元数据信息。文件的元数据信息存储在数据之后，包含了所有列块元数据信息的起始位置。读取的时候首先从文件末尾读取文件元数据信息，再在其中找到感兴趣的 Column Chunk 信息，并依次读取。文件元数据信息放在文件最后是为了方便数据依序一次性写入。</p>
+<p>具体的存储格式展示图： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-12.gif"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-12.gif" alt="图 12"></a>图 12</p>
+<p><strong>元数据信息</strong></p>
+<p>Parquet 总共有 3 中类型的元数据：文件元数据、列（块）元数据和 page header 元数据。所有元数据都采用 thrift 协议存储。具体信息如下所示： <a target="_blank" rel="noopener" href="https://helloyoubeautifulthing.net/img/parquet-format/fig-13.gif"><img src="https://helloyoubeautifulthing.net/img/parquet-format/fig-13.gif" alt="图 13"></a>图 13</p>
+<p>Parquet 数据类型</p>
+<p>在实现层级上，Parquet 只保留了最精简的部分数据类型，以方便存储和读写。在其上有逻辑类型（Logical Types）以供扩展，比如：逻辑类型 strings 就映射为带有 UTF8 标识的二进制 byte arrays 进行存储。</p>
+<p>Types：</p>
+<ul>
+<li>BOOLEAN: 1 bit boolean</li>
+<li>INT32: 32 bit signed ints</li>
+<li>INT64: 64 bit signed ints</li>
+<li>INT96: 96 bit signed ints</li>
+<li>FLOAT: IEEE 32-bit floating point values</li>
+<li>DOUBLE: IEEE 64-bit floating point values</li>
+<li>BYTE_ARRAY: arbitrarily long byte arrays.</li>
+</ul>
+<p>逻辑类型的更多说明请参考：<a target="_blank" rel="noopener" href="https://github.com/apache/parquet-format/blob/master/LogicalTypes.md">LogicalTypes.md</a>。</p>
+<p>Encoding</p>
+<p>数据编码的实现大部分和原理部分所阐述的一致，这里不再重复说明，更多细节可参考：<a target="_blank" rel="noopener" href="https://github.com/apache/parquet-format/blob/master/Encodings.md">Encodings.md</a>。</p>
+<p>Column chunks 存储</p>
+<p>Column chunks 由一个个 Pages 组成，Reader 在读取的时候可以根据 page header 信息跳过不感兴趣的页面。page header 中还存储着页面数据编码和压缩的信息。</p>
+<p>错误情况处理</p>
+<p>如果文件元数据损坏，则整个文件将丢失。如果列元数据损坏，则该列块将丢失（但其他行组中该列的列块还可以使用）。如果 page header 损坏，则该列块中的剩余页面都将丢失。如果页面中的数据损坏，则该页面将丢失。较小的文件行组配置，可以更有效地抵抗损坏。</p>
+<p>推荐配置</p>
+<ul>
+<li>行组大小（Row group size）：更大的行组允许更大的列块，这使得可以执行更大的顺序  IO。不过更大的行组需要更大的写缓存。Parquet  建议使用较大的行组（512MB-1GB）。此外由于可能需要读取整个行组，因此最好一个行组能完全适配一个 HDFS Block。因此，HDFS  块大小也需要相应的设置更大。一个较优的读取配置为：行组大小 1GB，HDFS 块大小 1GB，每个 HDFS 文件对应 1 个 HDFS 块。</li>
+<li>数据页大小（Data page  size）：数据页应视为不可分割的，因此较小的数据页可实现更细粒度的读取（例如单行查找）。但较大的页面可以减少空间的开销（减少 page  header 数量）和潜在的较少的解析开销（处理 headers）。Parquet 建议的页面大小为 8KB。</li>
+</ul>
+<p>参考资料:<br> [1]. Dremel: Interactive Analysis of WebScale Datasets<br> [2]. Dremel made simple with Parquet<br> [3]. 经典论文翻译导读之《Dremel: Interactive Analysis of WebScale Datasets》<br> [4]. 处理海量数据：列式存储综述（存储篇）<br> [5]. <a target="_blank" rel="noopener" href="https://parquet.apache.org/documentation/latest/">https://parquet.apache.org/documentation/latest/</a></p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/storage/" rel="tag">storage</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
