@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="http://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        Vectorization_Model
+    </h2>
+    <ul class="post-date">
+        <li>
+            2023-05-15
+        </li>
+        <li>
+            lyssom
+        </li>
+    </ul>
+    <div class="post-content">
+        <p>向量化执行和编译执行是目前主流的两种数据库执行引擎优化手段，本文从以下几个方面对向量化执行和编译执行进行浅析。</p>
+<p><strong>当代CPU特性</strong>了解CPU特性可以让我们真正理解各种数据库执行引擎优化技术的动机。影响数据库执行引擎执行效率的CPU特性主要有以下几点：超标量流水线与乱序执行、分支预测、多级存储与数据预取、SIMD。</p>
+<p><strong>超标量流水线与乱序执行</strong>CPU指令执行可以分为多个阶段(如取址、译码、取数、运算等)，流水线的意思是指一套控制单元可以同时执行多个指令，只是每个指令处在不同的阶段，例如上一条指令处理到了取数阶段，下一条指令处理到了译码阶段。超标量的意思是指一个CPU核同时有多套控制单元，因此可以同时有多个流水线并发执行。CPU维护了一个乱序执行的指令窗口，窗口中的无数据依赖的指令就会被取来并发执行。程序做好以下两个方面，可以提高超标量流水线的吞吐(IPC，每时钟周期执行指令数)。一，流水线不要断，不需要等到上一条指令执行完，就可以开始执行下一条指令。这意味着程序分支越少越好(知道下一条指令在哪)。二，并发指令越多越好。指令之间没有依赖，意味着更流畅的流水线执行，以及在多个流水线并发执行。</p>
+<p><strong>分支预测</strong>程序分支越少，流水线效率越高。但是程序分支是不可避免的。程序分支可以分为两种，条件跳转和无条件跳转。条件跳转来自if或switch之类的语句。无条件跳转又可根据指令的操作数为跳转地址还是跳转地址指针，分为直接跳转和间接跳转。直接跳转一般为静态绑定的函数调用，间接跳转来自函数返回或<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%99%9A%E5%87%BD%E6%95%B0&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">虚函数</a>之类动态绑定的函数调用。当执行一个跳转指令时，在得到跳转的目的地址之前，不知道该从哪取下一条指令，流水线就只能空缺等待。为了提高这种情况下的流水线效率，CPU引入了一组寄存器，用来专门记录最近几次某个地址的跳转指令的目的地址。这样，当再一次执行到这个跳转指令时，就直接从上次保存的目的地址出取指令，放入流水线。等到真正获取到目的地址的时候，再看如果取错了，则推翻当前流水线中的指令，取真正的指令执行。</p>
+<p><strong>多级存储与数据预取</strong>多级存储就不用解释了，当数据在寄存器、cache或内存中，CPU取数速度不在一个数量级。尤其cache和内存访问，相差两个数量级。CPU在内存取数的时候会首先从cache中查找数据是否存在。若不存在，则访问内存，在访问内存的同时将访问的数据所在的一个内存块一起载入cache。如果程序访问数据存在线性访问的模式，CPU会主动将后续的内存块预先载入cache，这就是CPU的数据预取。有时候程序访问数据并不是线性的，例如Hash表查找等。CPU也提供了数据预取指令，程序可以事先主动将会用到的数据载入cache，这就是Software Prefetch。如何利用好寄存器和cache是数据库查询执行非常重要的优化方向。</p>
+<p><strong>SIMD</strong>单指令多数据流，对于计算密集型程序来说，可能经常会需要对大量不同的数据进行同样的运算。SIMD引入之前，执行流程为同样的指令重复执行，每次取一条数据进行运算。例如有8个32位整形数据都需要进行移位运行，则由一条对32位整形数据进行移位的指令重复执行8次完成。SIMD引入了一组大容量的寄存器，一个寄存器包含8<em>32位，可以将这8个数据按次序同时放到一个寄存器。同时，CPU新增了处理这种8</em>32位寄存器的指令，可以在一个指令周期内完成8个数据的位移运算。如何利用好SIMD也是不少数据库的优化方向，尤其是向量化执行的策略下。</p>
+<p><strong>查询执行模型****火山模型</strong>数据库查询执行最著名的是火山模型，也是在各种<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">数据库系统</a>中应用最广泛的模型。SQL查询在数据库中经过解析，会生成一棵查询树，查询数的每个节点为代数运算符(Operator)。火山模型把Operator看成迭代器，每个迭代器都会提供一个next() 接口。一般Operator的next() 接口实现分为三步， 1.调用子节点Operator的next()  接口获取一行数据(tuple)，2.对tuple进行Operator特定的处理(如filter 或project  等)，3.返回处理后的tuple。因此，查询执行时会由查询树自顶向下的调用next()  接口，数据则自底向上的被拉取处理。火山模型的这种处理方式也称为拉取执行模型(Pull Based)。火山模型的优点是，处理逻辑清晰，每个Operator 只要关心自己的处理逻辑即可，耦合性低。但是缺点也非常明显：数据以行为单位进行处理，不利于CPU cache  发挥作用。且每处理一行需要调用多次next()  函数，而next()为虚函数，开销大。VectorWise[4]对TPC-H中Q1执行过程进行了性能分析，结果发现所有Operator的运算逻辑(也就是真正的查询执行过程)所花费的时间只占总时间的10%。向量化执行和编译执行分别从两个方向入手进行优化。<br><strong>编译执行</strong>考虑到火山模型大量虚函数调用导致的性能损失，推送执行模型(Push Based)很好的解决了这个问题。与拉取模型相反，推送模型自低向上的执行，执行逻辑由底层Operator开始，其处理完一个tuple之后，将tuple传给上层Operator处理。Hyper[3]作为代表性的编译执行的数据库，就采用了这种推送模型。我们直接来看Hyper论文中的例子，有如下SQL查询，select * from R1,R3,(select R2.z,count(<em>)from R2where R2.y&#x3D;3group by R2.z) R2where R1.x&#x3D;7 and R1.a&#x3D;R3.b and R2.z&#x3D;R3.c对于上面的SQL查询，其对应的Operator查询树如下图左侧所示。其中的符号对应着SQL应该也能看得出来，分别为Filter、Aggregation和Join。<img src="https://pic4.zhimg.com/v2-59a7484fbf1e19710ffd165bccb89bcf_b.jpg" alt="img">前面CPU的多级存储介绍提到，数据访问速度最快的是寄存器。所以在执行查询树时最理想的情况就是数据一直留在寄存器中(假设寄存器的容量足以放下一个tuple)，每个Operator直接处理寄存器中的数据。Operator之间从拉取模型的虚函数调用，变成了以数据为中心(data-centric)的顺序执行。当然，并不是所有的Operator的运算逻辑都可以处理完寄存器中的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=tuple&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">tuple</a>之后，把tuple留在寄存器中，由下一个Operator 接着处理。例如Join的时候，需要构建hash表，tuple就必须写入内存了(整个hash表当然不可能放到寄存器)。Hyper把Join这种不得不把数据从寄存器取出来，写入内存(论文中称这个事件为Materialization)的Operator称为Pipeline Breaker。然后以Pipeline Breaker为分割，将查询树划分为多个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=pipeline&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">pipeline</a>。在一个pipeline内，数据可以一直留在寄存器中。因此上图左侧的查询树，分割为Pipeline之后，对应的查询树就如图右侧所示。说到这里还是会觉得有点抽象，看一下上面的查询树对应的编译执行的伪代码，如下图。可见每个Pipeline对应一个For循环，一次循环处理一个tuple，tuple在一次循环内是不离开寄存器的。<img src="https://pic2.zhimg.com/v2-51809189cd432368902dabaf0403e189_b.jpg" alt="img">编译执行的难点在于如何把查询树编译成这样的代码执行。不像拉取模型，一个next()调用把数据传递和数据处理逻辑分的明明白白。复杂的Operator逻辑直接影响到编译执行的代码生成。Hyper观察Operator处理数据的模式，从中抽象出了两种函数接口Produce() 和  Consume()。Produce()函数负责产生结果tuple，然后通过调用下一个Operator的Consume()函数，将tuple向上传递。Consume()函数负责具体的tuple处理逻辑。Produce() 和 Consume()只是为了代码生成引入的逻辑概念，实际上是每个Operator会根据规则拆分为两个代码块，一块对应Produce()  ，一块对应consume()。代码生成的时候就可以根据这个规则生成代码。从下图可以看出Join、Filter和Scan  Operator与代码块的简单对应。当然，实际上会更加复杂。Hyper会利用LLVM直接生成其中间语言。详细的生成规则可见论文[3]附录。<img src="https://pic3.zhimg.com/v2-1d39d701b803fb8a428224349e9c060e_b.jpg" alt="img">编译执行以数据为中心，消灭了火山模型中的大量虚函数调用开销。甚至使大部分指令执行，可以直接从寄存器取数，极大的提高了执行效率。<strong>向量化执行</strong>向量化执行依然采用类似火山模型的拉取式模型，唯一的区别是其Operator的next()函数每次返回的是一批数据(如1000行)(一般向量化特指列式存储系统中，按列聚合的一组数据；在行式系统中称为RowSet迭代，本文不严格区分这两种情况)。向量化执行相对编译执行好理解一点，直接看一个例子(来自[1])，下图是一个JoinOperator的编译生成的伪代码和向量化执行的伪代码的对比。JoinOperator 的执行逻辑为，以左表的数据构建Hash表，然后以右表中的每行记录，分别去Hash表查找。这里的Hash表的冲突处理采用的是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E9%93%BE%E5%9C%B0%E5%9D%80%E6%B3%95&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">链地址法</a>，伪代码中最后一个循环就是遍历链表，找到真正的匹配项。<img src="https://pic1.zhimg.com/v2-eb376cfd844bb826ad62893c17da9a9c_b.jpg" alt="img">图中(a)部分为编译执行模型生成的伪代码，结合上一小节的介绍，比较容易理解。看一下图中(b)部分向量化执行的伪代码。刚刚提到，向量化执行的模式为拉取模型，每个Operator实现一个next()接口。与火山模型不同的，它一次处理一组数据。因此，可以看到这里面的变量都是Vector。由于变量为Vector，就需要事先定义一些专门处理Vector的元语(Primitives)。例如为Vector中的每一个元素计算Hash值的proheHash_，以及图中的compareKeys_、buildGather_。了解了这个，上面的伪代码也就不难看懂了。向量化执行模型有一下几个好处：1.大大减少火山模型中的虚函数调用数量；2.以块为处理单位数据，提供了cache命中率；3.多行并发处理，契合了CPU乱序执行与并发执行的特性。4.同时处理多行数据，使SIMD有了用武之地(虽然目前SIMD对大多数数据库查询起到的作用比较有限[1]，本质上<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">数据库查询</a>都属于数据访问密集型应用，而不是SIMD最擅长的计算密集型应用)。<strong>向量化</strong>VS<strong>编译执行</strong>相比火山模型，向量化与编译执行都使数据库查询执行性能得到了极大的提升，这两者之间相比又如何呢。首先这两个模型是不相容的，二者只能取其一。因为编译执行强调的是以数据为中心，在一个Pipeline内是不会有Materialization的，但是向量化执行是拉取模型，每次经过next()调用，Vector的传递必须Materialize。Pavlo[1]的团队在同一个系统(Peloton)里实现了这两种模型，以进行各方面对比。这里直接说结论，那就是各有千秋，没有谁比谁更优秀，只有谁比谁更合适。[1]选取了TPC-H中非常有代表性的5个SQL查询，Q1和Q18主要运算为定点数运算(Fixed-point arithmetic)和Aggregation，Q6主要运算为Filter，Q3和Q9主要运算为Join。测试结果如下图。<img src="https://pic1.zhimg.com/v2-d1259dc5e7998ce3162621f2585bf708_b.jpg" alt="img">从图中可以看出向量化执行对于Q3和Q9查询更高效，而编译执行对于Q1和Q18语句更高效。为了理解这种性能差异的原因，我们还需要下面这张图来进行解释。<img src="https://pic4.zhimg.com/v2-cc2c275c65449a6a1ff1a165242691b3_b.jpg" alt="img">图中的Typer是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%BC%96%E8%AF%91%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">编译执行引擎</a>，Tectorwise是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%90%91%E9%87%8F%E5%8C%96%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">向量化执行引擎</a>。Memory Stall指的是CPU执行指令时，内存取数的等待时间。可以看出Q3和Q9，Typer主要就是慢在了Memory Stall。因为Hash表数据分布比较随机，Hash查找时cache命中率不高，经常需要访问内存。<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%90%91%E9%87%8F%E5%8C%96%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">向量化执行模型</a>的循环较短，并发度高，可以同时有更多的指令等待取数，总的等待时间就短了。而编译执行循环内部会包含多个Operator的运算，这些有依赖关系的指令占据了大部分的乱序执行窗口，并发度低，总的等待取数时间就长了。另外，更复杂的循环也导致分支预测失败的代价更高。而对于Q1和Q18，由于运算过程中cache命中率比较高，没有Memory Stall的拖累，编译执行模型Pipeline执行无Materialization的优势就体现出来了。<br><strong>编译执行融合向量化</strong>什么？融合？不是才说这两种执行模型不相容么？说简单也简单，把查询树分解一下，部分用向量化方式，部分用编译执行方式即可。基本思想是简单，可真的做起来，还是有不少问题需要解决的。目前这样的系统并不多，这里就介绍一个最近的工作。Pavlo的团队在Peloton中实现的一个原型系统 Relaxed Operator Fusion (ROF)[2]。 编译执行的主要目标是减少Materialization，ROF则是在编译执行的基础上，主动在其中的Pipeline中插入Materialization，将Pipeline分割为Stage，在Stage内依然是<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=tuple-at-a-time&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">tuple-at-a-time</a>  data-centric的推送模型，保留了编译执行数据停留在寄存器中的优点。而跨Stage或Pipeline时，则以Block(一组tuple)为单位传递数据，这个时候就可以利用上SIMD。另外，ROF还使用了Software Prefetch来优化编译执行当Hash表查找时cache命中率低Memory Stall过多的问题。我们可以通过下面这个例子了解ROF的主要思想。<strong>SELECT SUM</strong>(…) <strong>AS</strong> revenue*<em>FROM</em></em> LineItem <strong>JOIN</strong> Part <strong>ON</strong> l_partkey &#x3D; p_partkey<strong>WHERE</strong> (CLAUSE1) <strong>OR</strong> (CLAUSE2) <strong>OR</strong> (CLAUSE3)上面的SQL是TPC-H Q19的简化版本。其中CLAUSE1<del>3分别是LineItem和Part两个表上的查询条件。这段SQL对应的编译执行的查询数和ROF的查询树如下图。<img src="https://pic1.zhimg.com/v2-dad652426e25d202b3004f7652ec560c_b.jpg" alt="img">可以看到ROF  相比原来的查询树，在P2这个Pipeline的第一个Filter后面插入了一个Operator(图中标红)。这个Operator表示Vector Output，把P2分成了两个Stage(我们称这种分割Stage的Operator为Stage  boundary)，在Stage内部为tuple-at-a-time，跨Stage则以Vector为单位传递数据。P2对应ROF的伪代码如下图。Stage1进行TableScan和Filter，将VECTOR_SIZE数量的Tuple插入Vector。Stage2对Vector中的数据进行HashProbe、Filter以及Aggregate。<img src="https://pic3.zhimg.com/v2-429a962c714be2d15ce8e243bcdef202_b.jpg" alt="img">上面的例子展示了ROF是怎么把Pipeline分割成Stage的，但是到目前为止，我们并没有看到这么做有什么好处。这里最关键的问题是，应该在Pipeline的哪个位置插入Stage boundary，才能达到最优的效果。ROF按照两个规则分割Stage：R1. 可以使用SIMD的Operator的输入和输出点；R2.  需要对无规律地址数据(且数据量大于Cache)进行访问的Operator的输入点。R1是为了利用SIMD进行并发计算，R2是为了使用Software  prefetch提高cache命中率。这是基本策略，在实现时还有一些技术点需要考虑。为了快速获取SIMD寄存器中Filter过后的数据，ROF利用一个Mask索引，将SIMD寄存器中的有效数据Shuffle到一起。当数据量不大时，数据预取反而会带来额外开销。ROF在编译时会生成两套执行路径，在运行时根据数据量决定是否需要预取。具体细节这里就不展开了，感兴趣的同学可以看一下论文[2]。对于TPC-H中的查询，实现了ROF的Peloton与VectorWise[4]和Hyper[3]的性能对比，性能提升在1</del>8倍之间[2]。<strong>总结</strong>本文介绍了向量化执行与编译执行的优化动机、原理、效果，以及这一块最近学术研究的进展。由于各种查询不同运算的差异性和多样性，以及随着硬件机制的发展，这一块后续还有不少工作可以扩展。<br>[1] Kersten, Timo, et al. “Everything you always wanted to know about compiled and vectorized queries but were afraid to ask.” <em>Proceedings of the VLDB Endowment</em> 11.13 (2018): 2209-2222.</p>
+<p>[2] Menon, Prashanth, Todd C. Mowry, and Andrew Pavlo. “Relaxed operator fusion for [in-memory databases](<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=in-memory">https://www.zhihu.com/search?q=in-memory</a> databases&amp;search_source&#x3D;Entity&amp;hybrid_search_source&#x3D;Entity&amp;hybrid_search_extra&#x3D;{“sourceType”%3A”article”%2C”sourceId”%3A”63996040”}): Making compilation, <a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=vectorization&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%2263996040%22%7D">vectorization</a>, and prefetching work together at last.” <em>Proceedings of the VLDB Endowment</em> 11.1 (2017): 1-13.</p>
+<p>[3] Neumann, Thomas. “Efficiently compiling efficient query plans for modern hardware.” <em>Proceedings of the VLDB Endowment</em>4.9 (2011): 539-550.</p>
+<p>[4] Boncz, Peter A., Marcin Zukowski, and Niels Nes. “MonetDB&#x2F;X100: Hyper-Pipelining Query Execution.” <em>Cidr</em>. Vol. 5. 2005.</p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/storage/" rel="tag">storage</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
