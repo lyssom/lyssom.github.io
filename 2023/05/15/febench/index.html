@@ -123,18 +123,18 @@
     
     
     <h2 class="post-title">
-        
+        FEBench A Benchmark for Real-Time Feature Extraction
     </h2>
     <ul class="post-date">
         <li>
-            2024-03-14
+            2023-05-15
         </li>
         <li>
             lyssom
         </li>
     </ul>
     <div class="post-content">
-        <h1 id="FEBench-A-Benchmark-for-Real-Time-Feature-Extraction"><a href="#FEBench-A-Benchmark-for-Real-Time-Feature-Extraction" class="headerlink" title="FEBench: A Benchmark for Real-Time Feature Extraction"></a>FEBench: A Benchmark for Real-Time Feature Extraction</h1><h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><p>实时关系数据特征提取的基准”的文档解决了缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究。作者提出了一个名为FEBench的基准测试，该基准测试基于来自开放存储库和4Paradigm的一百多个真实数据集。他们分析了 RTFE 工作负载与现有数据库基准测试在应用场景、运算符分布和查询结构方面的差异。FEBench 由精选的代表性数据集、查询模板和在线请求模拟器组成。作者使用 FEBench 来评估特征提取系统的有效性，发现每个系统在整体延迟、尾部延迟和并发性能方面都有明显的优势和局限性。 </p>
+        <h1 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h1><p>实时关系数据特征提取的基准”的文档解决了缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究。作者提出了一个名为FEBench的基准测试，该基准测试基于来自开放存储库和4Paradigm的一百多个真实数据集。他们分析了 RTFE 工作负载与现有数据库基准测试在应用场景、运算符分布和查询结构方面的差异。FEBench 由精选的代表性数据集、查询模板和在线请求模拟器组成。作者使用 FEBench 来评估特征提取系统的有效性，发现每个系统在整体延迟、尾部延迟和并发性能方面都有明显的优势和局限性。 </p>
 <p>要点： </p>
 <ul>
 <li>实时特征提取 （RTFE） 系统已被开发用于在超低延迟下计算请求的特征。 </li>
@@ -143,10 +143,10 @@
 <li>FEBench 基于一百多个真实数据集，包括代表性数据集、查询模板和在线请求模拟器。 </li>
 <li>FEBench 用于评估特征提取系统的有效性，并揭示每个系统的独特优势和局限性。</li>
 </ul>
-<h1 id="FEBench-如何解决缺乏对实时特征提取-（RTFE）-系统的工作负载特征和基准的研究？"><a href="#FEBench-如何解决缺乏对实时特征提取-（RTFE）-系统的工作负载特征和基准的研究？" class="headerlink" title="FEBench 如何解决缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究？"></a><strong>FEBench 如何解决缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究？</strong></h1><p>FEBench 通过使用来自开放存储库和 4Paradigm 1</a> 的 100 多个真实数据集对 RTFE 工作负载特征进行研究，解决了实时特征提取 （RTFE） 系统工作负载特征和基准研究不足的问题 。该研究强调了 RTFE 工作负载与现有数据库基准测试在应用场景、运算符分布和查询结构  1</a>方面的显著差异。基于这些发现，提出了FEBench作为实时特征提取基准，由选定的代表性数据集、查询模板和在线请求模拟器 1</a>组成。 FEBench 旨在满足 Jim Gray 提出的特定领域基准的四个重要标准，包括相关性、简单性、可移植性和可扩展性。该基准测试涵盖了广泛的特征提取行为，包括来自各种来源的 100 多个真实特征提取工作负载， 每个来源为 10</a>。它旨在消除冗余测试并易于理解，适用于支持类 SQL 语言  10</a> 的不同特征提取系统。此外，FEBench 包括不同数据大小和分布的真实数据集，使其能够以  10</a> FEBench 用于比较现有的不同解决方案，用于实时特征提取  5</a>。初步结果表明，包括 OpenMLDB 和 Flink 在内的被测试系统在性能差异和长尾问题等不同方面都存在自身的问题。这些发现表明，未来5</a>的特征提取系统需要进一步改进 。 </p>
+<h1 id="FEBench-如何解决缺乏对实时特征提取-（RTFE）-系统的工作负载特征和基准的研究"><a href="#FEBench-如何解决缺乏对实时特征提取-（RTFE）-系统的工作负载特征和基准的研究" class="headerlink" title="FEBench 如何解决缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究"></a>FEBench 如何解决缺乏对实时特征提取 （RTFE） 系统的工作负载特征和基准的研究</h1><p>FEBench 通过使用来自开放存储库和 4Paradigm 1</a> 的 100 多个真实数据集对 RTFE 工作负载特征进行研究，解决了实时特征提取 （RTFE） 系统工作负载特征和基准研究不足的问题 。该研究强调了 RTFE 工作负载与现有数据库基准测试在应用场景、运算符分布和查询结构  1</a>方面的显著差异。基于这些发现，提出了FEBench作为实时特征提取基准，由选定的代表性数据集、查询模板和在线请求模拟器 1</a>组成。 FEBench 旨在满足 Jim Gray 提出的特定领域基准的四个重要标准，包括相关性、简单性、可移植性和可扩展性。该基准测试涵盖了广泛的特征提取行为，包括来自各种来源的 100 多个真实特征提取工作负载， 每个来源为 10</a>。它旨在消除冗余测试并易于理解，适用于支持类 SQL 语言  10</a> 的不同特征提取系统。此外，FEBench 包括不同数据大小和分布的真实数据集，使其能够以  10</a> FEBench 用于比较现有的不同解决方案，用于实时特征提取  5</a>。初步结果表明，包括 OpenMLDB 和 Flink 在内的被测试系统在性能差异和长尾问题等不同方面都存在自身的问题。这些发现表明，未来5</a>的特征提取系统需要进一步改进 。 </p>
 <h1 id="比较不同现有解决方案的初步结果是什么？"><a href="#比较不同现有解决方案的初步结果是什么？" class="headerlink" title="比较不同现有解决方案的初步结果是什么？"></a>比较不同现有解决方案的初步结果是什么？</h1><p>Flink 的 TP-50 延迟比 OpenMLDB  20</a> 慢了近两个数量级。在 Flink 和 OpenMLDB 中，Q0&#x2F;Q1&#x2F;Q2 的 TP-50 延迟都比 Q3&#x2F;Q4&#x2F;Q5 的延迟要短，因为后者的查询需要更复杂的算子  21</a>。OpenMLDB 存在明显的长尾问题，而 Flink 的尾部时延更稳定 ，为 22</a>。在并发性能方面，OpenMLDB 的 TP-50 延迟在线程数增加时保持相对稳定，而 Flink 的 TP-50 延迟变化较小 ，为 22</a>。执行延迟细分显示，在 Flink 和 OpenMLDB 中，Q0-Q2 的 frontend_bound 指标最耗时，而 Q3-Q5 的backend_bound和停用指标对  23</a> </p>
 <h1 id="Flink-的-TP-50-延迟与-OpenMLDB-相比如何？"><a href="#Flink-的-TP-50-延迟与-OpenMLDB-相比如何？" class="headerlink" title="Flink 的 TP-50 延迟与 OpenMLDB 相比如何？"></a>Flink 的 TP-50 延迟与 OpenMLDB 相比如何？</h1><p>Flink 的 TP-50 延迟比 OpenMLDB  20</a> 慢了近两个数量级。在 Flink 和 OpenMLDB 中，Q0&#x2F;Q1&#x2F;Q2 的 TP-50 延迟都比 Q3&#x2F;Q4&#x2F;Q5 的延迟要短，因为后者的查询需要更复杂的算子  21</a>。OpenMLDB 存在明显的长尾问题，而 Flink 的尾部时延更稳定 ，为 22</a>。在并发性能方面，OpenMLDB 的 TP-50 延迟在线程数增加时保持相对稳定，而 Flink 的 TP-50 延迟变化较小 ，为 22</a>。执行延迟细分显示，在 Flink 和 OpenMLDB 中，Q0-Q2 的 frontend_bound 指标最耗时，而 Q3-Q5 的backend_bound和停用指标对  23</a> </p>
-<p><a target="_blank" rel="noopener" href="https://github.com/decis-bench/febench">https://github.com/decis-bench/febench</a></p>
+<p>项目链接：<a target="_blank" rel="noopener" href="https://github.com/decis-bench/febench">https://github.com/decis-bench/febench</a><br>原文链接：<a target="_blank" rel="noopener" href="https://github.com/decis-bench/febench/blob/main/report/febench.pdf">https://github.com/decis-bench/febench/blob/main/report/febench.pdf</a></p>
 
     </div>
 </article>
@@ -160,7 +160,7 @@
                 
     <h1>Archives</h1>
 
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
 
 
             </section>
