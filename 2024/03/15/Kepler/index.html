@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="http://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        Robust Learning for Faster Parametric Query Optimization
+    </h2>
+    <ul class="post-date">
+        <li>
+            2024-03-15
+        </li>
+        <li>
+            lyssom
+        </li>
+    </ul>
+    <div class="post-content">
+        <h1 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h1><p>提出了一种基于端到端学习的方法，称为 Kepler，用于参数查询优化 （PQO）。现有的 PQO 技术依赖于传统的查询优化器成本模型，这些模型通常不准确，导致查询性能欠佳。Kepler 通过使用实际执行数据评估候选计划并训练机器学习模型来预测给定参数绑定值的最快计划，从而绕过了对准确成本模型的需求。该研究的主要发现包括显著改进了PostgreSQL上多个数据集的查询运行时，使用强大的神经网络技术来减少查询回归，以及开发一种称为行计数进化（RCE）的新型候选计划生成算法。Kepler 在 Stack 基准测试中实现了 2.41 倍的整体加速。本文档还讨论了参数化查询优化和用于查询优化的机器学习方面的相关工作。 </p>
+<p>要点： </p>
+<ul>
+<li>现有的参数化查询优化技术依赖于不准确的成本模型，导致查询性能欠佳。 </li>
+<li>Kepler 是一种基于端到端学习的参数化查询优化方法。 </li>
+<li>Kepler 通过使用实际执行数据评估候选计划并训练机器学习模型，从而绕过了对准确成本模型的需求。 </li>
+<li>Kepler 在 PostgreSQL 上的多个数据集上实现了查询运行时的重大改进。 </li>
+<li>Kepler 使用强大的神经网络技术来减少查询回归。 </li>
+<li>Kepler 引入了一种称为行计数进化 （RCE） 的新型候选计划生成算法。 </li>
+<li>Kepler 在 Stack 基准测试中实现了 2.41 倍的整体加速。</li>
+</ul>
+<h1 id="如何绕过PQO中对精确成本模型的需求"><a href="#如何绕过PQO中对精确成本模型的需求" class="headerlink" title="如何绕过PQO中对精确成本模型的需求"></a>如何绕过PQO中对精确成本模型的需求</h1><p>Kepler 通过实际执行数据评估候选计划并训练机器学习 （ML） 模型来预测给定参数绑定值的最快计划，从而绕过了 PQO 中对准确成本模型的需求 。这种方法使 Kepler 能够利用神经网络不确定性的最新进展来稳健地预测更快的计划，同时避免查询性能的回归。<br>传统的 PQO 技术依赖于不准确的成本模型，这通常会导致查询性能欠佳。然而，Kepler的方法通过使用实际执行数据来评估候选计划，从而绕过了这一要求。这消除了对准确成本模型的需求，而是依靠 ML 模型来预测最快的计划。Kepler 的 ML 模型利用神经网络的不确定性来确保可靠的预测，并避免查询性能的回归  。<br>Kepler 的 PQO 方法基于行计数演化 （RCE） 算法，这是一种在子计划基数空间中运行的新型计划生成算法。RCE根据子计划基数空间中的扰动生成候选计划，并使用实际执行数据对其进行评估。这种方法使 Kepler 能够在 PostgreSQL上的多个数据集上实现查询运行时的显著改进 。<br>总之，Kepler 通过使用实际执行数据评估候选计划并训练 ML 模型来预测最快的，从而绕过了 PQO 中对准确成本模型的需求 。这种方法与行计数演进算法相结合，使 Kepler 能够显著加快查询延迟，并将查询性能提高。</p>
+<h1 id="基于行计数演化-（RCE）-算法逻辑"><a href="#基于行计数演化-（RCE）-算法逻辑" class="headerlink" title="基于行计数演化 （RCE） 算法逻辑"></a>基于行计数演化 （RCE） 算法逻辑</h1><p>行计数演变 （RCE） 算法是一种计算效率高的方法，它通过扰动优化器的基数估计来生成新计划。RCE 利用内置的查询优化器来生成候选计划，并将随机扰动作为的进化式算法应用。它维护一系列的生成计划，每一代都由统一采样和扰动的父计划组成，以生成的子计划。RCE 仅干扰抽样查询计划中出现的子计划的基数，从而在不显著损失通用性的情况下提高效率 。<br>RCE 利用优化器 提供的初始估计值，通过在子计划基数的低维子空间中随机游走来有效地探索计划空间 。它包括各种超参数，例如代数、扰动的指数基数和范围，以及计划数量限制。RCE 的目标是生成一组计划，其中包含每个查询实例的近乎最优的计划，从而在生成的计划数量和潜在的总加速<br>为了收集训练数据，RCE 在训练工作负载上执行每个计划，并生成执行延迟数据集，用于监督最佳计划预测 。自适应超时和近乎最优的计划覆盖用于在执行期间修剪次优计划。执行在多个数据库之间并行化，并执行重复执行以模拟热缓冲区缓存场景，并降低执行时间测量值<br>总体而言，RCE 通过基于扰动的基数估计并利用查询优化器生成候选计划，绕过了 PQO 中对准确成本模型的需求 。 </p>
+<h1 id="随机扰动在RCE的探索中起什么作用"><a href="#随机扰动在RCE的探索中起什么作用" class="headerlink" title="随机扰动在RCE的探索中起什么作用"></a>随机扰动在RCE的探索中起什么作用</h1><p>随机扰动在RCE探索中的作用是通过随机扰动优化器的基数估计来生成新的计划。RCE 应用随机扰动作为演化风格的算法，保持的生成计划序列。它统一地对上一代的父计划进行采样，并仅扰乱父计划中出现的子计划的联接基数。通过多次重复此过程并将产生的扰动馈送到查询优化器中，RCE 会生成一组子计划。这些随机扰动使 RCE 能够探索计划空间，并可能找到</p>
+<p>原文：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/pdf/10.1145/3588963">https://dl.acm.org/doi/pdf/10.1145/3588963</a></p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/storage/" rel="tag">storage</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
