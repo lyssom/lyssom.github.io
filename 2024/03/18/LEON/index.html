@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="keywords" content="hexo, autumn" />
+    <title>
+        Antithesis
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/favicon.ico" />
+     
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css" />
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/frontendsophie/hexo-infinite-scroll@2.0.0/dist/main.js"></script>
+
+    <script>
+        infiniteScroll()
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const [
+                mainTitle,
+                mobileMenu,
+                mobileMainTitle,
+                mobileMenuBtn,
+                ipadMenuBtn,
+                aside,
+                closeBtn,
+            ] = getEle(
+                '#main-title',
+                '.mobile-menu',
+                '.mobile-menu h3',
+                '.mobile-menu button',
+                '.ipad-menu',
+                'aside',
+                'aside .close',
+            )
+            const io = new IntersectionObserver(entries => {
+                if (entries[0].intersectionRatio <= 0) {
+                    mobileMainTitle.classList.remove('invisibile')
+                } else {
+                    mobileMainTitle.classList.add('invisibile')
+                }
+            })
+            io.observe(mainTitle)
+
+            clickToggleAside(mobileMenuBtn)
+            clickToggleAside(ipadMenuBtn)
+            clickToggleAside(closeBtn, false)
+
+            const isMenuVisible = window.getComputedStyle(mobileMenu).display !== 'none'
+            if (isMenuVisible) document.body.style.background = 'none'
+
+            function getEle(...args) {
+                return args.map(arg => document.querySelector(arg))
+            }
+
+            function clickToggleAside(btn, show = true) {
+                btn.addEventListener('click', function () {
+                    if (show) {
+                        aside.style.display = 'block'
+                    } else {
+                        aside.style.display = 'none'
+                    }
+                })
+            }
+        })
+    </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+    <div class="container">
+        <header class="header">
+    <nav class="mobile-menu" style="background: url(https://cdn.jsdelivr.net/gh/frontendsophie/hexo-theme-autumn@1.0.0/source/img/button-bg.png) #f3f3f3">
+        <h3 class="invisibile">
+            <a href="/" class="logo">
+                Antithesis
+            </a>
+        </h3>
+        <button class="menu">menu</button>
+    </nav>
+
+    <button class="ipad-menu menu">menu</button>
+
+    <h1 class="title" id="main-title">
+        <a href="/" class="logo">
+            Antithesis
+        </a>
+    </h1>
+    <h2 class="desc">
+        
+    </h2>
+
+    <div class="links">
+        <ul>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="https://github.com/lyssom">
+                    Github
+                </a>
+            </li>
+            
+            <li>
+                <a target="_blank" rel="noopener" href="http://lyssom.github.io/about">
+                    About
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</header>
+        <main class="main">
+            <article class="post">
+    
+    
+    
+    <h2 class="post-title">
+        A New Framework for ML-Aided Query Optimization
+    </h2>
+    <ul class="post-date">
+        <li>
+            2024-03-18
+        </li>
+        <li>
+            lyssom
+        </li>
+    </ul>
+    <div class="post-content">
+        <p>提出了一个利用机器学习（ML）来帮助数据库查询优化的框架。该文件的要点和关键论点如下： </p>
+<ul>
+<li>查询优化在数据库管理系统 （DBMS） 中至关重要，并且一直是一个具有挑战性的话题。 </li>
+<li>ML 在查询优化方面显示出优势，但传统的基于 ML 的方法由于其数据驱动的性质而存在局限性。 </li>
+<li>拟议的LEON框架旨在通过利用ML和该领域的基础知识来改进专家查询优化器。 </li>
+<li>LEON 使用成对排名目标来训练 ML 模型，这与以前的回归目标不同。 </li>
+<li>提出了一种基于排序和不确定性的勘探策略，以帮助优化器找到有价值的计划。 </li>
+<li>引入了 ML 模型引导的修剪策略，可在不牺牲性能的情况下提高规划效率。 </li>
+<li>大量实验表明，LEON 在端到端延迟性能、训练效率和稳定性方面优于最先进的方法。</li>
+</ul>
+<p>要点： </p>
+<ul>
+<li>查询优化在 DBMS 中是必不可少的，但具有挑战性。 </li>
+<li>ML在传统的查询优化方法中具有局限性。 </li>
+<li>LEON 框架利用 ML 来增强专家查询优化器。 </li>
+<li>成对排名目标用于 ML 模型训练。 </li>
+<li>基于排名和不确定性的勘探策略有助于找到有价值的计划。 </li>
+<li>ML 模型引导的修剪可提高规划效率，而不会造成性能损失。 </li>
+<li>大量的实验证明了LEON在性能、效率和稳定性方面的优越性。</li>
+</ul>
+<h1 id="LEON框架如何解决传统ML方法的局限性"><a href="#LEON框架如何解决传统ML方法的局限性" class="headerlink" title="LEON框架如何解决传统ML方法的局限性"></a>LEON框架如何解决传统ML方法的局限性</h1><p>LEON 框架通过将 ML 模型深度集成到传统优化器中，将 ML 和专家知识相结合，解决了传统 ML 方法在查询优化中的局限性 。LEON 利用 ML 模型来帮助针对特定数据库实例、数据集、工作负载和硬件量身定制的专家查询优化器。它训练一个神经网络来近似最优分数函数，用于等效集内优化决策和等效集间剪枝，这有助于准确对计划进行排名，而无需仅依赖专家成本模型。此外，LEON 通过在计划搜索期间收集经验并迭代训练 ML 模型来进行模型更新，以提高 ML 辅助优化器的性能。通过利用 ML 模型来指导修剪决策和计划探索，LEON 提高了计划效率和稳定性，在训练效率、延迟性能和稳定性</p>
+<h1 id="LEON如何有效地将ML和专业知识结合起来？"><a href="#LEON如何有效地将ML和专业知识结合起来？" class="headerlink" title="LEON如何有效地将ML和专业知识结合起来？"></a>LEON如何有效地将ML和专业知识结合起来？</h1><p>LEON 通过将 ML 模型深度集成到传统优化器中，有效地将机器学习 （ML） 和专业知识结合在一起，从而同时利用 ML 和专家知识。LEON 中的 ML 模型通过影响等效集内和等效集间剪枝中的优化决策来帮助专家查询优化器，从而改进排名和剪枝过程。LEON中的ML模型学习评分函数，在等效集中对计划进行准确排名，并预测完整查询的整体排名，从而提高计划效率和稳定性。此外，LEON 通过在计划搜索期间收集经验并迭代训练 ML 模型来执行模型更新以提高性能，确保 ML 辅助优化器继续学习和适应。通过有效地将 ML 模型集成到查询优化过程中，LEON 在训练效率、延迟性能和稳定性方面实现了最先进的性能，始终优于传统方法和专家DBMS。 </p>
+<h1 id="LEON如何确保机器学习模型的持续学习和适应"><a href="#LEON如何确保机器学习模型的持续学习和适应" class="headerlink" title="LEON如何确保机器学习模型的持续学习和适应"></a>LEON如何确保机器学习模型的持续学习和适应</h1><p>LEON通过其模型更新过程确保ML模型的持续学习和适应。在此过程中，LEON 在计划搜索过程中收集经验，并使用它以迭代方式训练 ML 模型，以提高的性能。体验收集步骤涉及维护体验池以收集执行反馈，包括各种参数，例如逻辑表达式、完整查询、计划、物理属性、成本和延迟。收集的经验用于训练 ML 模型，这些模型在每次迭代中都会根据收集的反馈进行更新。模型训练步骤包括使用上下文配对计划、排名目标和安全正则化作为损失函数，使用收集到的经验训练 ML 模型 。这种收集经验和训练 ML 模型的迭代过程一直持续到满足预定义的停止条件，确保 LEON 中的 ML 辅助优化器随着时间的推移继续学习和适应。 </p>
+<p>原文链接: <a target="_blank" rel="noopener" href="https://www.vldb.org/pvldb/vol16/p2261-chen.pdf">https://www.vldb.org/pvldb/vol16/p2261-chen.pdf</a></p>
+
+    </div>
+</article>
+        </main>
+        <aside class="aside">
+            <div class="close"></div>
+            <section class="aside-section">
+                
+            </section>
+            <section class="aside-section">
+                
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li></ul>
+
+
+            </section>
+            <section class="aside-section tag">
+                
+    <h1>Tags</h1>
+
+    <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/storage/" rel="tag">storage</a></li></ul>
+
+            </section>
+        </aside>
+    </div>
+</body>
+
+</html>
